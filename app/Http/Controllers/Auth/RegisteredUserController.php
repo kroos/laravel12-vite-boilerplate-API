@@ -50,6 +50,7 @@ class RegisteredUserController extends Controller
 		event(new Registered($login));
 
 		Auth::login($login);
+		$login->createToken('MyApp')->plainTextToken;
 
 		return redirect(route('dashboard', absolute: false));
 	}

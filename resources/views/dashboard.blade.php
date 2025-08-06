@@ -43,6 +43,10 @@
 
 @section('js')
 
+$.ajaxSetup({
+	xhrFields: { withCredentials: true }, // very important!
+});
+
 $('#opt').select2({
 	theme: 'bootstrap-5',
 	placeholder: 'Please choose',
@@ -51,13 +55,17 @@ $('#opt').select2({
 	width: '100%',
 	ajax: {
 		url: '{{ route('yesnooption.index') }}',
-		type: 'POST',
+		type: 'GET',
 		dataType: 'json',
 		delay: 250,											// Delay to reduce server requests
+		headers: {
+			// 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+			'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+			'Authorization': 'Bearer {{ \Auth::user()->createToken('apitoken')->plainTextToken }}'
+		},
 		data: function (params) {
 			return {
 				_token: '{!! csrf_token() !!}',
-				type: $('input[name="type"]:checked').val(),
 				search: params.term,				// Search query
 			}
 		},
@@ -66,8 +74,8 @@ $('#opt').select2({
 		}
 	},
 });
-@if(null !== old('category_id'))
-	var newOptionType = new Option('{!! \App\Models\Category::find(old('category_id'))->category !!}', '{{ old('category_id') }}', true, true);
+@if(null !== old('option'))
+	var newOptionType = new Option('{!! \App\Models\Category::find(old('option'))->category !!}', '{{ old('option') }}', true, true);
 	$('#category').append(newOptionType).trigger('change');
 @endif
 @endsection
