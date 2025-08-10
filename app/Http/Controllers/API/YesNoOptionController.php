@@ -17,7 +17,7 @@ class YesNoOptionController extends Controller
 	 */
 	public function index()
 	{
-		$yno = YesNoOption::get();
+		$yno = YesNoOption::get(['option', 'value']);
 		return response()->json($yno);
 	}
 

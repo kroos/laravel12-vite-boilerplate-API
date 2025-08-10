@@ -42,40 +42,44 @@
 @endsection
 
 @section('js')
-
-$.ajaxSetup({
-	xhrFields: { withCredentials: true }, // very important!
-});
-
-$('#opt').select2({
-	theme: 'bootstrap-5',
-	placeholder: 'Please choose',
-	allowClear: true,
-	closeOnSelect: true,
-	width: '100%',
-	ajax: {
-		url: '{{ route('yesnooption.index') }}',
-		type: 'GET',
-		dataType: 'json',
-		delay: 250,											// Delay to reduce server requests
-		headers: {
-			// 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-			'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-			'Authorization': 'Bearer {{ \Auth::user()->createToken('apitoken')->plainTextToken }}'
-		},
-		data: function (params) {
-			return {
-				_token: '{!! csrf_token() !!}',
-				search: params.term,				// Search query
+$.get('/sanctum/csrf-cookie').done(function () {
+	$('#opt').select2({
+		theme: 'bootstrap-5',
+		placeholder: 'Please choose',
+		allowClear: true,
+		closeOnSelect: true,
+		width: '100%',
+		ajax: {
+			url: '{{ route('yesnooption.index') }}',
+			type: 'GET',
+			dataType: 'json',
+			delay: 250,											// Delay to reduce server requests
+			xhrFields: {
+				withCredentials: true // <-- Needed for cookies to be sent
+			},
+			data: function (params) {
+				return {
+					_token: '{!! csrf_token() !!}',
+					search: params.term,				// Search query
+				}
+			},
+			processResults: function (data) {
+				return {
+					results: data.map(function(item) {
+						return {
+							id: item.value,
+							text: item.option,
+							raw: item
+						}
+					})
+				};
 			}
 		},
-		processResults: function (data) {
-			return { results: data }; // Since backend returns a flat array, no need to transform
-		}
-	},
+	});
+	@if(null !== old('option'))
+		var newOptionType = new Option('{!! \App\Models\YesNoOption::find(old('option'))->value !!}', '{{ old('option') }}', true, true);
+		$('#opt').append(newOptionType).trigger('change');
+	@endif
 });
-@if(null !== old('option'))
-	var newOptionType = new Option('{!! \App\Models\Category::find(old('option'))->category !!}', '{{ old('option') }}', true, true);
-	$('#category').append(newOptionType).trigger('change');
-@endif
+
 @endsection
