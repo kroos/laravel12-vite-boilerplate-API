@@ -37,12 +37,12 @@
 	</div>
 
 
-
 </div>
 @endsection
 
 @section('js')
-$.get('/sanctum/csrf-cookie').done(function () {
+$.get('http://localhost:8000/sanctum/csrf-cookie').done(function () {
+
 	$('#opt').select2({
 		theme: 'bootstrap-5',
 		placeholder: 'Please choose',
@@ -54,9 +54,6 @@ $.get('/sanctum/csrf-cookie').done(function () {
 			type: 'GET',
 			dataType: 'json',
 			delay: 250,											// Delay to reduce server requests
-			xhrFields: {
-				withCredentials: true // <-- Needed for cookies to be sent
-			},
 			data: function (params) {
 				return {
 					_token: '{!! csrf_token() !!}',
