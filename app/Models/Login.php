@@ -6,7 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+// use Laravel\Sanctum\HasApiTokens;
 
 // database relationship
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -28,8 +28,8 @@ class Login extends Authenticatable implements MustVerifyEmail
 	protected $table = 'logins';
 	protected $primaryKey = 'id';
 
-	use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
-	// use HasFactory, Notifiable, SoftDeletes;
+	// use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+	use HasFactory, Notifiable, SoftDeletes;
 
 	 /**
 	 * The attributes that are mass assignable.
@@ -59,10 +59,10 @@ class Login extends Authenticatable implements MustVerifyEmail
 	 *
 	 * @var array<string, string>
 	 */
-	// protected $casts = [
+	protected $casts = [
 	// 	'email_verified_at' => 'datetime',
-	// 	// 'password' => 'hashed',		// this is because we are using clear text password
-	// ];
+		'password' => 'hashed',		// this is because we are using clear text password
+	];
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// db relation hasMany/hasOne
@@ -140,13 +140,6 @@ class Login extends Authenticatable implements MustVerifyEmail
 			'email_verified_at' => $this->freshTimestamp(),
 		])->save();
 	}
-
-	// Method to send email verification
-//	public function sendEmailVerificationNotification()
-//	{
-//		// We override the default notification and will use our own
-//		$this->notify(new EmailVerificationNotification());
-//	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// all acl will be done here
