@@ -1,14 +1,14 @@
 <?php
-
 namespace {{ namespace }};
 
 use {{ rootNamespace }}Http\Controllers\Controller;
 
 // for controller output
 // use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
+// use Illuminate\Http\Response;
 // use Illuminate\Support\Facades\Redirect;
 // use Illuminate\View\View;
-use Illuminate\Http\JsonResponse;
 
 // models
 use {{ namespacedModel }};
@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 
 // load validation
+use Illuminate\Support\Facades\Validator;
 use {{ namespacedRequests }}
 
 // load batch and queue
