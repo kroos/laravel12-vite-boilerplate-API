@@ -49,8 +49,7 @@ window.DataTable = DataTable;
 import '@claviska/jquery-minicolors';
 
 // Chart.js
-import Chart from 'chart.js/auto';
-window.Chart = Chart;
+import  './chart';
 
 // fullcalendar
 import './fullcalendar';
