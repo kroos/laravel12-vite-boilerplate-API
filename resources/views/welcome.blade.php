@@ -77,6 +77,10 @@
 				<button type="button" id="experience_add">+ Add Experience</button>
 				<hr>
 				<h2>Unlimited Tiers Dynamic Input</h2>
+				<style>
+					.row-box { border: 1px solid #999; margin: 5px; padding: 8px; }
+					.nested { margin-left: 20px; border-left: 3px solid #ddd; padding-left: 10px; }
+				</style>
 				<div id="root_wrap"></div>
 				<button type="button" id="root_add">+ Add Root Item</button>
 				<hr>
