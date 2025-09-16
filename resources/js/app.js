@@ -54,3 +54,6 @@ window.Chart = Chart;
 
 // fullcalendar
 import './fullcalendar';
+
+// addRemoveRow
+import	'./addRemoveRowjQueryPlugins';
