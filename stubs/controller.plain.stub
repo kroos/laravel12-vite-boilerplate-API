@@ -16,6 +16,7 @@ use Illuminate\View\View;
 
 // load validation
 use Illuminate\Support\Facades\Validator;
+use {{ namespacedRequests }}
 
 // load db facade
 use Illuminate\Database\Eloquent\Builder;
@@ -27,6 +28,13 @@ use Illuminate\Support\Facades\Http;
 // load batch and queue
 use Illuminate\Bus\Batch;
 use Illuminate\Support\Facades\Bus;
+
+// load email
+use Illuminate\Support\Facades\Mail;
+// more email
+
+// load pdf
+// use Barryvdh\DomPDF\Facade\Pdf;
 
 // load helper
 use Illuminate\Support\Arr;

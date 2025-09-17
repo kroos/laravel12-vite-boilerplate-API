@@ -17,12 +17,23 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
+// load validation
+use Illuminate\Support\Facades\Validator;
+use {{ namespacedRequests }}
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 // load batch and queue
 use Illuminate\Bus\Batch;
 use Illuminate\Support\Facades\Bus;
+
+// load email
+use Illuminate\Support\Facades\Mail;
+// more email
+
+// load pdf
+// use Barryvdh\DomPDF\Facade\Pdf;
 
 // load helper
 use Illuminate\Support\Arr;
