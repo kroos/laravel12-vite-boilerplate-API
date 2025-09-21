@@ -2,6 +2,7 @@
 namespace {{ namespace }};
 
 use {{ rootNamespace }}Http\Controllers\Controller;
+use Illuminate\Support\Facades\Http;
 
 // for controller output
 // use Illuminate\Http\RedirectResponse;
@@ -17,10 +18,8 @@ use {{ namespacedModel }};
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
-use Illuminate\Support\Facades\Http;
-use Illuminate\Http\Request;
-
 // load validation
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use {{ namespacedRequests }}
 
