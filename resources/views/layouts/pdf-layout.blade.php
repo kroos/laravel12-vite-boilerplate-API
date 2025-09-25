@@ -1,3 +1,7 @@
+<?php
+// \Auth::user()->setConnection('mysql3');
+\Auth::user()->belongstostaff->unreadNotifications->markAsRead();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -142,7 +146,7 @@
 	<!-- Header -->
 	<div class="header">
 		<img src="{{ public_path('images/logo.png') }}" class="logo">
-		@yield('title', 'BTM Document')
+		@yield('title', 'Document')
 	</div>
 
 	<!-- Content -->
@@ -153,7 +157,7 @@
 	<!-- Footer -->
 	<div class="footer">
 		<div class="footer-box">
-			© Insert Footer.
+			© Document
 		</div>
 	</div>
 </body>

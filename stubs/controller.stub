@@ -25,9 +25,10 @@ use {{ namespacedRequests }}
 use Illuminate\Bus\Batch;
 use Illuminate\Support\Facades\Bus;
 
-// load email
+// load email & notification
 use Illuminate\Support\Facades\Mail;
-// more email
+use Illuminate\Support\Facades\Notification;
+// more email & notification
 
 // load pdf
 // use Barryvdh\DomPDF\Facade\Pdf;
