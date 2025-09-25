@@ -43,8 +43,8 @@ class {{ class }} extends Notification
         return (new MailMessage)
                     ->subject('Your ICMS Request Has Been Submitted')
                     // u can use markdown too
-                    // ->markdown('emails.applicant.created', [
-                    //     'user'      => $notifiable,
+                    // ->markdown('emails.created', [
+                    //     'user' => $notifiable,
                     // ])
                     // ->greeting('Hello ' . $notifiable->name . ',')
                     ->line('The introduction to the notification.')
