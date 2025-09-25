@@ -1,7 +1,6 @@
 <?php
 namespace {{ namespace }};
 use {{ rootNamespace }}Http\Controllers\Controller;
-use Illuminate\Support\Facades\Http;
 
 // for controller output
 use Illuminate\Http\JsonResponse;
@@ -17,7 +16,6 @@ use {{ namespacedModel }};
 // load db facade
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
-
 
 // load validation
 use Illuminate\Http\Request;
@@ -50,8 +48,6 @@ use Session;
 use Throwable;
 use Exception;
 use Log;
-
-
 
 class {{ class }} extends Controller
 {

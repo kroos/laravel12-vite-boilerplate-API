@@ -1,16 +1,16 @@
 <?php
 namespace {{ namespace }};
-
 use {{ rootNamespace }}Http\Controllers\Controller;
 
 // for controller output
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
-use Illuminate\Http\JsonResponse;
 
 // models
-
+// use {{ namespacedModel }};
 
 // load db facade
 use Illuminate\Database\Eloquent\Builder;
@@ -20,9 +20,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use {{ namespacedRequests }}
-
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 
 // load batch and queue
 use Illuminate\Bus\Batch;

@@ -1,10 +1,6 @@
 <?php
 namespace {{ namespace }};
-
 use {{ rootNamespace }}Http\Controllers\Controller;
-use Illuminate\Support\Facades\Http;
-
-
 
 // for controller output
 use Illuminate\Http\JsonResponse;
@@ -53,8 +49,6 @@ use Session;
 use Throwable;
 use Exception;
 use Log;
-
-
 
 class {{ class }} extends Controller
 {
