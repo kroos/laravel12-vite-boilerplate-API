@@ -69,22 +69,16 @@
 
 			<form id="myForm">
 				<h2>Dynamic Skills with Sub-skills (2 Tiers Dynamic Input)</h2>
-				<div id="skills_wrap"></div>
-				<button type="button" id="skills_add" class="m-1 btn btm-primary">+ Add Skill</button>
+				<div id="skills_wrap">
+				</div>
+				<button type="button" id="skills_add" class="m-1 btn btn-sm btn-primary">+ Add Skill</button>
 				<hr>
 				<h2>Experiences (1 Tiers Dynamic Input)</h2>
-				<div id="experience_wrap" class="section"></div>
-				<button type="button" id="experience_add">+ Add Experience</button>
+				<div id="experience_wrap" class="section">
+				</div>
+				<button type="button" id="experience_add" class="btn btn-sm btn-outline-info">+ Add Experience</button>
 				<hr>
-				<h2>Unlimited Tiers Dynamic Input</h2>
-				<style>
-					.row-box { border: 1px solid #999; margin: 5px; padding: 8px; }
-					.nested { margin-left: 20px; border-left: 3px solid #ddd; padding-left: 10px; }
-				</style>
-				<div id="root_wrap"></div>
-				<button type="button" id="root_add">+ Add Root Item</button>
-				<hr>
-				<button type="submit" class="m-1 btn btm-primary">Submit</button>
+				<button type="submit" class="m-1 btn btn-sm btn-outline-primary"><i class="fa-regular fa-floppy-disk"></i>&nbsp;Submit</button>
 			</form>
 		</div>
 
@@ -290,17 +284,30 @@ $("#skills_wrap").remAddRow({
 	fieldName: "skills",
 	rowIdPrefix: "skill",
 	rowTemplate: (i, name) => `
-	<div class="row-box" id="skill_${i}">
-		<span data-row-index>Skill #${i+1}</span>
-		<input type="text" name="${name}[${i}][name]" placeholder="Skill ${i+1}">
-		<button type="button" class="skill_remove" data-id="${i}">X</button>
+		<div class="col-sm-12 m-1 row border border-primary" id="skill_${i}">
+			<label for="sk_${i}" class="col-form-label col-sm-3">Skill #${i+1}</label>
+			<div class="col-sm-9 row @error('skills.*') is-invalid @enderror">
+				<div class="col-sm-10 my-auto">
+					<input type="text" name="${name}[${i}]" value="{{ old('skills.*') }}" id="sk_${i}" class="form-control form-control-sm @error('skills.*') is-invalid @enderror" placeholder="Skill ${i+1}">
+				</div>
+				<div class="col-sm-1 m-1">
+					<i class="fa-regular fa-trash-can fa-beat skill_remove" data-id="${i}"></i>
+				</div>
+			</div>
+			@error('skills.*')
+			<div class="invalid-feedback">
+				{{ $message }}
+			</div>
+			@enderror
 
-		<!-- Sub-skills wrapper -->
-		<div class="sub-skill">
-			<div id="subskill_wrap_${i}"></div>
-			<button type="button" id="subskill_add_${i}">+ Add Sub-skill</button>
+			<!-- Sub-skills wrapper -->
+			<div class="col-sm-9 offset-sm-3 mt-1 mb-1 border border-primary-subtle">
+				<div id="subskill_wrap_${i}">
+				</div>
+				<button type="button" id="subskill_add_${i}" class="m-1 btn btn-sm btn-primary">+ Add Sub-skill</button>
+			</div>
+
 		</div>
-	</div>
 	`,
 	removeSelector: ".skill_remove",
 	onAdd: (i, $row1) => {
@@ -313,11 +320,22 @@ $("#skills_wrap").remAddRow({
 			fieldName: `skills[${i}][subskills]`,
 			rowIdPrefix: `subskill_${i}`,
 			rowTemplate: (j, name) => `
-			<div class="row-box" id="subskill_${i}_${j}">
-				<span data-row-index>Sub-skill #${j+1}</span>
-				<input type="text" name="${name}[${j}]" placeholder="Sub-skill ${j+1}">
-				<button type="button" class="subskill_remove" data-id="${j}">Remove</button>
-			</div>
+				<div class="col-sm-12 m-1 row" id="subskill_${i}_${j}">
+					<label for="sbsk_${j}" class="col-form-label col-sm-3">Sub-skill #${j+1}</label>
+					<div class="col-sm-9 row @error('skills.*.subskills.*') is-invalid @enderror">
+						<div class="col-sm-10 my-auto">
+							<input type="text" name="${name}[${j}]" value="{{ old('skills.*.subskills.*') }}" id="sbsk_${j}" class="form-control form-control-sm @error('skills.*.subskills.*') is-invalid @enderror" placeholder="Sub-skill ${j+1}">
+						</div>
+						<div class="col-sm-1 m-1">
+							<i class="fa-regular fa-trash-can fa-beat subskill_remove" data-id="${j}"></i>
+						</div>
+					</div>
+					@error('skills.*.subskills.*')
+					<div class="invalid-feedback">
+						{{ $message }}
+					</div>
+					@enderror
+				</div>
 			`,
 			removeSelector: ".subskill_remove",
 			onAdd: (j, $row2) => {
@@ -333,6 +351,7 @@ $("#skills_wrap").remAddRow({
 	}
 });
 
+///////////////////////////////////////////////////////////////////////////////////////////
 // Experiences (fieldName "experiences")
 $("#experience_wrap").remAddRow({
 	addBtn: "#experience_add",
@@ -341,21 +360,36 @@ $("#experience_wrap").remAddRow({
 	fieldName: "experiences",
 	rowIdPrefix: "exp",
 	rowTemplate: (i, name) => `
-	<div class="row-box" id="exp_${i}">
-		<span data-row-index>Exp #${i+1}</span>
-		<input type="text" name="${name}[${i}]" placeholder="Experience ${i+1}">
-		<button type="button" class="exp_remove" data-id="${i}">X</button>
-	</div>
-	`
-});
-
-$("#root_wrap").remAddRow({
-  addBtn: "#root_add",
-  maxFields: 3,
-  fieldName: "root",
-  rowIdPrefix: "root",
-  onAdd: (i, $row) => console.log("Added root row", i),
-  onRemove: (i) => console.log("Removed root row", i)
+		<div class="col-sm-12 row g-3 m-1" id="exp_${i}">
+			<div class="form-floating col-sm-4 @error('exp.*.name') is-invalid @enderror">
+				<input type="text" name="${name}[${i}][name]" id="name_${i}" class="form-control @error('exp.*.name') is-invalid @enderror">
+				<label for="name_${i}">Name :</label>
+			</div>
+			@error('exp.*.name')
+			<div class="invalid-feedback">
+				{{ message }}
+			</div>
+			@enderror
+			<div class="form-floating col-sm-4 @error('exp.*.id') is-invalid @enderror">
+				<input type="text" name="${name}[${i}][id]" id="id_${i}" class="form-control @error('exp.*.id') is-invalid @enderror">
+				<label for="id_${i}">ID :</label>
+			</div>
+			@error('exp.*.id')
+			<div class="invalid-feedback">
+				{{ message }}
+			</div>
+			@enderror
+			<div class="col-sm-1">
+				<button class="btn btn-sm btn-outline-danger exp_remove" data-id="${i}"><i class="fa-solid fa-xmark fa-beat"></i></button>
+			</div>
+		</div>
+	`,
+	onAdd: (i, row) => {
+		console.log("Experience added:", `exp_${i}`, row);
+	},
+	onRemove: (i) => {
+		console.log("Experience removed:", `exp_${i}`);
+	},
 });
 
 ///////////////////////////////////////////////////////////////////////////////////////////
