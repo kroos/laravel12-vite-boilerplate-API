@@ -283,22 +283,40 @@ $("#skills_wrap").remAddRow({
 	maxFields: 3,
 	fieldName: "skills",
 	rowIdPrefix: "skill",
+	removeSelector: ".skill_remove",
 	rowTemplate: (i, name) => `
-		<div class="col-sm-12 m-1 row border border-primary" id="skill_${i}">
-			<label for="sk_${i}" class="col-form-label col-sm-3">Skill #${i+1}</label>
-			<div class="col-sm-9 row @error('skills.*') is-invalid @enderror">
-				<div class="col-sm-10 my-auto">
-					<input type="text" name="${name}[${i}]" value="{{ old('skills.*') }}" id="sk_${i}" class="form-control form-control-sm @error('skills.*') is-invalid @enderror" placeholder="Skill ${i+1}">
+		<div class="col-sm-12 m-1 row g-3 border border-primary rounded" id="skill_${i}">
+			<div class="col-sm-12 m-0 row g-3">
+				<label for="name_${i}" class="form-label col-sm-3">Name #${i+1}</label>
+				<div class="col-sm-9 row @error('skills.*.name') is-invalid @enderror">
+					<div class="col-sm-10 my-auto">
+						<input type="text" name="${name}[${i}][name]" value="{{ old('skills.*.name') }}" id="name_${i}" class="form-control form-control-sm @error('skills.*.name') is-invalid @enderror" placeholder="Name ${i+1}">
+					</div>
 				</div>
-				<div class="col-sm-1 m-1">
-					<i class="fa-regular fa-trash-can fa-beat skill_remove" data-id="${i}"></i>
+				@error('skills.*.name')
+				<div class="invalid-feedback">
+					{{ $message }}
 				</div>
+				@enderror
 			</div>
-			@error('skills.*')
-			<div class="invalid-feedback">
-				{{ $message }}
+			<div class="col-sm-12 m-0 row g-3">
+				<label for="sk_${i}" class="form-label col-sm-3">Skill #${i+1}</label>
+				<div class="col-sm-9 row my-auto @error('skills.*.skill') is-invalid @enderror">
+					<div class="col-sm-10 m-0">
+						<input type="text" name="${name}[${i}][skill]" value="{{ old('skills.*.skill') }}" id="sk_${i}" class="form-control form-control-sm @error('skills.*.skill') is-invalid @enderror" placeholder="Skill ${i+1}">
+					</div>
+					<div class="col-sm-1 m-1">
+						<button class="btn btn-sm btn-outline-danger skill_remove" data-id="${i}">
+							<i class="fa-regular fa-trash-can fa-beat"></i>
+						</button>
+					</div>
+				</div>
+				@error('skills.*.skill')
+				<div class="invalid-feedback">
+					{{ $message }}
+				</div>
+				@enderror
 			</div>
-			@enderror
 
 			<!-- Sub-skills wrapper -->
 			<div class="col-sm-9 offset-sm-3 mt-1 mb-1 border border-primary-subtle">
@@ -309,7 +327,6 @@ $("#skills_wrap").remAddRow({
 
 		</div>
 	`,
-	removeSelector: ".skill_remove",
 	onAdd: (i, $row1) => {
 		console.log("Skill added:", "skill_"+i, $row1);
 
@@ -320,21 +337,23 @@ $("#skills_wrap").remAddRow({
 			fieldName: `skills[${i}][subskills]`,
 			rowIdPrefix: `subskill_${i}`,
 			rowTemplate: (j, name) => `
-				<div class="col-sm-12 m-1 row" id="subskill_${i}_${j}">
-					<label for="sbsk_${j}" class="col-form-label col-sm-3">Sub-skill #${j+1}</label>
-					<div class="col-sm-9 row @error('skills.*.subskills.*') is-invalid @enderror">
-						<div class="col-sm-10 my-auto">
-							<input type="text" name="${name}[${j}]" value="{{ old('skills.*.subskills.*') }}" id="sbsk_${j}" class="form-control form-control-sm @error('skills.*.subskills.*') is-invalid @enderror" placeholder="Sub-skill ${j+1}">
+				<div class="col-sm-12 m-1 row g-2" id="subskill_${i}_${j}">
+						<label for="sbsk_${j}" class="col-form-label col-sm-3">Sub-skill #${j+1}</label>
+						<div class="col-sm-9 row @error('skills.*.subskills.*') is-invalid @enderror">
+							<div class="col-sm-10 my-auto">
+								<input type="text" name="${name}[${j}]" value="{{ old('skills.*.subskills.*') }}" id="sbsk_${j}" class="form-control form-control-sm @error('skills.*.subskills.*') is-invalid @enderror" placeholder="Sub-skill ${j+1}">
+							</div>
+							<div class="col-sm-1 m-1">
+								<button class="btn btn-sm btn-outline-danger subskill_remove" data-id="${j}">
+									<i class="fa-regular fa-trash-can fa-beat"></i>
+								</button>
+							</div>
 						</div>
-						<div class="col-sm-1 m-1">
-							<i class="fa-regular fa-trash-can fa-beat subskill_remove" data-id="${j}"></i>
+						@error('skills.*.subskills.*')
+						<div class="invalid-feedback">
+							{{ $message }}
 						</div>
-					</div>
-					@error('skills.*.subskills.*')
-					<div class="invalid-feedback">
-						{{ $message }}
-					</div>
-					@enderror
+						@enderror
 				</div>
 			`,
 			removeSelector: ".subskill_remove",
