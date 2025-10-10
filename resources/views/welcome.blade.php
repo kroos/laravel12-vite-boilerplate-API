@@ -67,11 +67,20 @@
 		<div class="col-sm-8 row justify-content-center align-items-center m-2 border border-success">
 			<h2>1 And 2 Tier Dynamic Inputs (with Form)</h2>
 
-			<form id="myForm">
+			<form id="myForm" action="{{ route('welcome') }}" method="post">
+				@csrf
+
+
+<script>
+    const oldSkills = @json(old('skills', []));
+    const oldExperiences = @json(old('experiences', []));
+</script>
+
+
 				<h2>Dynamic Skills with Sub-skills (2 Tiers Dynamic Input)</h2>
 				<div id="skills_wrap">
 				</div>
-				<button type="button" id="skills_add" class="m-1 btn btn-sm btn-primary">+ Add Skill</button>
+				<button type="button" id="skills_add" class="m-1 btn btn-sm btn-outline-primary">+ Add Skill</button>
 				<hr>
 				<h2>Experiences (1 Tiers Dynamic Input)</h2>
 				<div id="experience_wrap" class="section">
@@ -319,7 +328,7 @@ $("#skills_wrap").remAddRow({
 			</div>
 
 			<!-- Sub-skills wrapper -->
-			<div class="col-sm-9 offset-sm-3 mt-1 mb-1 border border-primary-subtle">
+			<div class="col-sm-9 offset-sm-3 mt-1 mb-1 border border-primary-subtle rounded">
 				<div id="subskill_wrap_${i}">
 				</div>
 				<button type="button" id="subskill_add_${i}" class="m-1 btn btn-sm btn-primary">+ Add Sub-skill</button>
@@ -337,23 +346,38 @@ $("#skills_wrap").remAddRow({
 			fieldName: `skills[${i}][subskills]`,
 			rowIdPrefix: `subskill_${i}`,
 			rowTemplate: (j, name) => `
-				<div class="col-sm-12 m-1 row g-2" id="subskill_${i}_${j}">
-						<label for="sbsk_${j}" class="col-form-label col-sm-3">Sub-skill #${j+1}</label>
-						<div class="col-sm-9 row @error('skills.*.subskills.*') is-invalid @enderror">
-							<div class="col-sm-10 my-auto">
-								<input type="text" name="${name}[${j}]" value="{{ old('skills.*.subskills.*') }}" id="sbsk_${j}" class="form-control form-control-sm @error('skills.*.subskills.*') is-invalid @enderror" placeholder="Sub-skill ${j+1}">
-							</div>
-							<div class="col-sm-1 m-1">
-								<button class="btn btn-sm btn-outline-danger subskill_remove" data-id="${j}">
-									<i class="fa-regular fa-trash-can fa-beat"></i>
-								</button>
-							</div>
+				<div class="col-sm-12 m-1 row g-2 border border-info-subtle rounded" id="subskill_${i}_${j}">
+					<div class="col-sm-12 m-1 row g-2">
+						<label for="sbsk_${j}" class="form-label col-sm-2">Sub-skill #${j+1}</label>
+						<div class="col-sm-8 my-auto @error('skills.*.subskills.*.subskill') is-invalid @enderror">
+							<input type="text" name="${name}[${j}][subskill]" value="{{ old('skills.*.subskills.*.subskill') }}" id="sbsk_${j}" class="form-control form-control-sm @error('skills.*.subskills.*.subskill') is-invalid @enderror" placeholder="Sub-skill ${j+1}">
 						</div>
-						@error('skills.*.subskills.*')
+						@error('skills.*.subskills.*.subskill')
 						<div class="invalid-feedback">
 							{{ $message }}
 						</div>
 						@enderror
+					</div>
+
+					<div class="col-sm-12 m-1 row g-2">
+						<label for="sbsky_${j}" class="form-label col-sm-2">Years #${j+1}</label>
+						<div class="col-sm-8 my-auto @error('skills.*.subskills.*.years') is-invalid @enderror">
+							<input type="text" name="${name}[${j}][years]" value="{{ old('skills.*.subskills.*.years') }}" id="sbsky_${j}" class="form-control form-control-sm @error('skills.*.subskills.*.years') is-invalid @enderror" placeholder="Years ${j+1}">
+						</div>
+						<div class="col-sm-1">
+							<button class="btn btn-sm btn-outline-danger subskill_remove" data-id="${j}">
+								<i class="fa-regular fa-trash-can fa-beat"></i>
+							</button>
+						</div>
+						@error('skills.*.subskills.*.years')
+						<div class="invalid-feedback">
+							{{ $message }}
+						</div>
+						@enderror
+					</div>
+
+
+
 				</div>
 			`,
 			removeSelector: ".subskill_remove",
@@ -380,24 +404,24 @@ $("#experience_wrap").remAddRow({
 	rowIdPrefix: "exp",
 	rowTemplate: (i, name) => `
 		<div class="col-sm-12 row g-3 m-1" id="exp_${i}">
-			<div class="form-floating col-sm-4 @error('exp.*.name') is-invalid @enderror">
-				<input type="text" name="${name}[${i}][name]" id="name_${i}" class="form-control @error('exp.*.name') is-invalid @enderror">
+			<div class="form-floating col-sm-4 @error('experiences.*.name') is-invalid @enderror">
+				<input type="text" name="${name}[${i}][name]" id="name_${i}" class="form-control @error('experiences.*.name') is-invalid @enderror">
 				<label for="name_${i}">Name :</label>
+				@error('experiences.*.name')
+				<div class="invalid-feedback">
+					{{ $message }}
+				</div>
+				@enderror
 			</div>
-			@error('exp.*.name')
-			<div class="invalid-feedback">
-				{{ message }}
-			</div>
-			@enderror
-			<div class="form-floating col-sm-4 @error('exp.*.id') is-invalid @enderror">
-				<input type="text" name="${name}[${i}][id]" id="id_${i}" class="form-control @error('exp.*.id') is-invalid @enderror">
+			<div class="form-floating col-sm-4 @error('experiences.*.id') is-invalid @enderror">
+				<input type="text" name="${name}[${i}][id]" id="id_${i}" class="form-control @error('experiences.*.id') is-invalid @enderror">
 				<label for="id_${i}">ID :</label>
+				@error('experiences.*.id')
+				<div class="invalid-feedback">
+					{{ $message }}
+				</div>
+				@enderror
 			</div>
-			@error('exp.*.id')
-			<div class="invalid-feedback">
-				{{ message }}
-			</div>
-			@enderror
 			<div class="col-sm-1">
 				<button class="btn btn-sm btn-outline-danger exp_remove" data-id="${i}"><i class="fa-solid fa-xmark fa-beat"></i></button>
 			</div>
@@ -409,6 +433,44 @@ $("#experience_wrap").remAddRow({
 	onRemove: (i) => {
 		console.log("Experience removed:", `exp_${i}`);
 	},
+});
+
+///////////////////////////////////////////////////////////////////////////////////////////
+// restore after fail form process
+$(function () {
+
+	// === Restore old SKILLS ===
+	if (oldSkills.length > 0) {
+		oldSkills.forEach(function (skill, i) {
+			$("#skills_add").trigger('click'); // simulate add skill
+			const $skill = $("#skills_wrap").children().eq(i);
+
+			// Fill skill name + main skill
+			$skill.find(`input[name="skills[${i}][name]"]`).val(skill.name || '');
+			$skill.find(`input[name="skills[${i}][skill]"]`).val(skill.skill || '');
+
+			// === Restore SUB-SKILLS ===
+			if (skill.subskills && skill.subskills.length > 0) {
+				skill.subskills.forEach(function (sub, j) {
+					$(`#subskill_add_${i}`).trigger('click'); // simulate add sub-skill
+					const $sub = $(`#subskill_wrap_${i}`).children().eq(j);
+					$sub.find(`input[name="skills[${i}][subskills][${j}][subskill]"]`).val(sub.subskill || '');
+					$sub.find(`input[name="skills[${i}][subskills][${j}][years]"]`).val(sub.years || '');
+				});
+			}
+		});
+	}
+
+	// === Restore old EXPERIENCES ===
+	if (oldExperiences.length > 0) {
+		oldExperiences.forEach(function (exp, i) {
+			$("#experience_add").trigger('click'); // simulate add experience
+			const $exp = $("#experience_wrap").children().eq(i);
+			$exp.find(`input[name="experiences[${i}][name]"]`).val(exp.name || '');
+			$exp.find(`input[name="experiences[${i}][id]"]`).val(exp.id || '');
+		});
+	}
+
 });
 
 ///////////////////////////////////////////////////////////////////////////////////////////

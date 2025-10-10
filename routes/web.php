@@ -1,24 +1,48 @@
 <?php
-use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\ProfileController;
-
+use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
-	return view('welcome');
+    return view('welcome');
 });
 
+Route::post('/', function (Request $request) {
+    // dd($request->all());
+    $request->validate([
+            'skills.*.name' => 'required',
+            'skills.*.skill' => 'required',
+            'skills.*.subskills.*.subskill' => 'required',
+            'skills.*.subskills.*.years' => 'required',
+            'experiences.*.name' => 'required',
+            'experiences.*.id' => 'required',
+        ], [
+            'skills.*.name' => 'Please insert :attribute at #:position',   //:index
+            'skills.*.skill' => 'Please insert :attribute at #:position',   //:index
+            'skills.*.subskills.*.subskill' => 'Please insert :attribute at #:position',   //:index
+            'skills.*.subskills.*.years' => 'Please insert :attribute at #:position',   //:index
+            'experiences.*.name' => 'Please insert :attribute at #:position',   //:index
+            'experiences.*.id' => 'Please insert :attribute at #:position',   //:index
+        ], [
+            'skills.*.name' => 'Skill',
+            'skills.*.skill' => 'Name',
+            'skills.*.subskills.*.subskill' => 'Sub-Skill',
+            'skills.*.subskills.*.years' => 'Years',
+            'experiences.*.name' => 'Name',
+            'experiences.*.id' => 'ID',
+    ]);
+    return redirect()->back()->with('success', 'Successfully submitted form');
+})->name('welcome');
+
 Route::get('/dashboard', function () {
-	return view('dashboard');
+    return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'password.confirm'])->group(function () {
-	Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-	Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-	Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-
 
 require __DIR__.'/auth.php';
