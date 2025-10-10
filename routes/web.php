@@ -10,13 +10,17 @@ Route::get('/', function () {
 Route::post('/', function (Request $request) {
     // dd($request->all());
     $request->validate([
+            'skills' => 'required|array|min:1',
             'skills.*.name' => 'required',
             'skills.*.skill' => 'required',
             'skills.*.subskills.*.subskill' => 'required',
             'skills.*.subskills.*.years' => 'required',
+            'experiences' => 'required|array|min:1',
             'experiences.*.name' => 'required',
             'experiences.*.id' => 'required',
         ], [
+            'skills.required' => 'Please add at least one skill.',
+            'experiences.required' => 'Please add at least one experience.',
             'skills.*.name' => 'Please insert :attribute at #:position',   //:index
             'skills.*.skill' => 'Please insert :attribute at #:position',   //:index
             'skills.*.subskills.*.subskill' => 'Please insert :attribute at #:position',   //:index
@@ -24,8 +28,8 @@ Route::post('/', function (Request $request) {
             'experiences.*.name' => 'Please insert :attribute at #:position',   //:index
             'experiences.*.id' => 'Please insert :attribute at #:position',   //:index
         ], [
-            'skills.*.name' => 'Skill',
-            'skills.*.skill' => 'Name',
+            'skills.*.name' => 'Name',
+            'skills.*.skill' => 'Skill',
             'skills.*.subskills.*.subskill' => 'Sub-Skill',
             'skills.*.subskills.*.years' => 'Years',
             'experiences.*.name' => 'Name',
