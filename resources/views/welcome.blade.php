@@ -447,7 +447,9 @@ $("#countries_wrap").remAddRow({
 			<div class="col-sm-10 row m-0 mb-1 mt-1Country g-2">
 				<label for="country_${i}" class="col-sm-2 form-label">Country : </label>
 				<div class="col-sm-10 @error('countries.*.country_id') is-invalid @enderror">
-					<select name="${name}[${i}][country_id]" id="country_${i}" class="form-select form-select-sm @error('countries.*.country_id') is-invalid @enderror"></select>
+					<select name="${name}[${i}][country_id]" id="country_${i}" class="form-select form-select-sm @error('countries.*.country_id') is-invalid @enderror">
+						<option value="">Please choose</option>
+					</select>
 				</div>
 				@error('countries.*.country_id')
 				<div class="invalid-feedback">
@@ -458,27 +460,32 @@ $("#countries_wrap").remAddRow({
 			<div class="col-sm-10 row m-0 mb-1 mt-1Country g-2">
 				<label for="state_${i}" class="col-sm-2 form-label">State : </label>
 				<div class="col-sm-9 @error('countries.*.state_id') is-invalid @enderror">
-					<select name="${name}[${i}][state_id]" id="state_${i}" class="form-select form-select-sm @error('countries.*.state_id') is-invalid @enderror"></select>
+					<select name="${name}[${i}][state_id]" id="state_${i}" class="form-select form-select-sm @error('countries.*.state_id') is-invalid @enderror">
+						<option value="">Please choose</option>
+					</select>
+				</div>
+				<div class="col-sm-1 m-0 my-auto">
+					<button class="btn btn-sm btn-outline-danger country_remove" data-id="${i}">
+						<i class="fa-regular fa-trash-can fa-beat"></i>
+					</button>
 				</div>
 				@error('countries.*.state_id')
 				<div class="invalid-feedback">
 					{{ $message }}
 				</div>
 				@enderror
-				<div class="col-sm-1 m-0 my-auto">
-					<button class="btn btn-sm btn-outline-danger country_remove" data-id="${i}">
-						<i class="fa-regular fa-trash-can fa-beat"></i>
-					</button>
-				</div>
 			</div>
 		</div>
 	`,
 	onAdd: (i, row) => {
-		console.log("Country added:", `exp_${i}`, row);
+		console.log("Country added:", `ctry_${i}`, row);
 
 
-		// initiate select2 country
-		$('#country_'+i).select2({
+		const $country = $('#country_' + i);
+		const $state = $('#state_' + i);
+
+		// Initialize country select2
+		$country.select2({
 			placeholder: 'Select Country',
 			width: '100%',
 			allowClear: true,
@@ -490,21 +497,20 @@ $("#countries_wrap").remAddRow({
 			}
 		});
 
-		// initiate select2 state
-		const stateSelect = $('#state_'+i).select2({
+		// Initialize empty state select2
+		$state.select2({
 			placeholder: 'Select State',
 			width: '100%',
 			allowClear: true,
 			closeOnSelect: true,
 		});
 
-		// chained between country and state select2
-		$('#country_'+i).on('change', function () {
+		// When country changes, reload states dynamically
+		$country.on('change', function () {
 			const countryId = $(this).val();
-			stateSelect.empty().trigger('change');
-
+			$state.val(null).trigger('change');
 			if (countryId) {
-				stateSelect.select2({
+				$state.select2({
 					placeholder: 'Select State',
 					width: '100%',
 					allowClear: true,
@@ -513,71 +519,77 @@ $("#countries_wrap").remAddRow({
 						url: `{{ url('api/states') }}/${countryId}`,
 						dataType: 'json',
 						processResults: data => ({
-							results: data.filter(item => !selectedStates.includes(String(item.id))) // filter already-selected
-						}),
+							results: data.filter(item => !selectedStates.includes(String(item.id)))
+						})
 					}
 				});
 			}
 		});
-// 		// --- When a state is selected, track it globally
-// 		stateSelect.on('select2:select', function (e) {
-// 			const stateId = e.params.data.id;
-// 			if (!selectedStates.includes(stateId)) {
-// 				selectedStates.push(stateId);
-// 			}
-// 			updateStateOptions();
-// 		});
-//
-// 		// --- When a state is unselected, remove from global list
-// 		stateSelect.on('select2:unselect', function (e) {
-// 			const stateId = e.params.data.id;
-// 			selectedStates = selectedStates.filter(id => id !== stateId);
-// 			updateStateOptions();
-// 		});
-//
-// 		// --- Update when row removed
-// 		$(row).find('.country_remove').on('click', function () {
-// 			const selectedState = $('#state_' + i).val();
-// 			if (selectedState) {
-// 				selectedStates = selectedStates.filter(id => id !== selectedState);
-// 			}
-// 			$('#ctry_' + i).remove();
-// 			updateStateOptions();
-// 		});
 
+		// Track selected state
+		let previousState = null;
 
-	},
-	onRemove: (i) => {
-		console.log("Country removed:", `exp_${i}`);
-	},
-});
+		$state.on('select2:select', function (e) {
+			const stateId = e.params.data.id;
+			// Remove previous (if any) and add new
+			if (previousState) {
+				selectedStates = selectedStates.filter(id => id !== String(previousState));
+			}
+			selectedStates.push(String(stateId));
+			previousState = stateId;
+			// Refresh all state dropdowns so they re-filter
+			refreshAllStateDropdowns();
+		});
 
-// --- Helper function to refresh all state dropdowns
-function updateStateOptions() {
-	$('[id^=state_]').each(function () {
-		const select = $(this);
-		const currentVal = select.val();
-
-		select.find('option').each(function () {
-			const optionVal = $(this).val();
-			if (selectedStates.includes(optionVal) && optionVal !== currentVal) {
-				$(this).prop('disabled', true);
-			} else {
-				$(this).prop('disabled', false);
+		$state.on('select2:clear', function () {
+			// If cleared manually
+			if (previousState) {
+				selectedStates = selectedStates.filter(id => id !== String(previousState));
+				previousState = null;
+				refreshAllStateDropdowns();
 			}
 		});
 
-		select.trigger('change.select2'); // refresh UI
-	});
-}
+		// Helper: reapply filters on all state select2s
+		function refreshAllStateDropdowns() {
+			$('#countries_wrap select[id^="state_"]').each(function () {
+				const sel = $(this);
+				const countryId = sel.closest('.row').find('select[id^="country_"]').val();
+				if (countryId) {
+					sel.select2({
+						placeholder: 'Select State',
+						width: '100%',
+						allowClear: true,
+						closeOnSelect: true,
+						ajax: {
+							url: `{{ url('api/states') }}/${countryId}`,
+							dataType: 'json',
+							processResults: data => ({
+								results: data.filter(item => !selectedStates.includes(String(item.id)) || sel.val() === String(item.id))
+							})
+						}
+					});
+				}
+			});
+		}
+
+	},
+	onRemove: (i) => {
+		console.log("Country removed:", `ctry_${i}`);
+		// When a row is removed, remove its selected state from tracking
+		const stateVal = $(`#state_${i}`).val();
+		if (stateVal) {
+			selectedStates = selectedStates.filter(id => id !== String(stateVal));
+		}
+	},
+});
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 // restore after fail form process
 $(function () {
-
-			const oldSkills = @json(old('skills', []));
-			const oldExperiences = @json(old('experiences', []));
-
+	const oldSkills = @json(old('skills', []));
+	const oldExperiences = @json(old('experiences', []));
+	const oldCountries = @json(old('countries', []));
 
 	// === Restore old SKILLS ===
 	if (oldSkills.length > 0) {
@@ -610,6 +622,55 @@ $(function () {
 			$exp.find(`input[name="experiences[${i}][id]"]`).val(exp.id || '');
 		});
 	}
+
+	// === Restore old COUNTRIES ===
+	if (oldCountries.length > 0) {
+
+		oldCountries.forEach(function (ctry, i) {
+			// Add row dynamically
+			$("#countries_add").trigger('click');
+
+			// Grab the newly added row
+			const $row = $("#countries_wrap").children().eq(i);
+
+			const $country = $row.find(`select[name="countries[${i}][country_id]"]`);
+			const $state = $row.find(`select[name="countries[${i}][state_id]"]`);
+
+			// --- Restore Country ---
+			if (ctry.country_id) {
+				// Create option element manually
+				const countryOption = new Option('Loading...', ctry.country_id, true, true);
+				$country.append(countryOption).trigger('change');
+
+				// Fetch actual country name asynchronously
+				$.ajax({
+					url: '{{ route('countries') }}',
+					dataType: 'json'
+				}).then(data => {
+					const found = data.find(d => String(d.id) === String(ctry.country_id));
+					if (found) {
+						const option = new Option(found.text, found.id, true, true);
+						$country.empty().append(option).trigger('change');
+					}
+				});
+			}
+
+			// --- Restore State ---
+			if (ctry.state_id && ctry.country_id) {
+				$.ajax({
+					url: `{{ url('api/states') }}/${ctry.country_id}`,
+					dataType: 'json'
+				}).then(data => {
+					const found = data.find(d => String(d.id) === String(ctry.state_id));
+					if (found) {
+						const option = new Option(found.text, found.id, true, true);
+						$state.append(option).trigger('change');
+					}
+				});
+			}
+		});
+	}
+
 
 });
 
