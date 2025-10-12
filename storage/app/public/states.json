@@ -1,0 +1,51 @@
+[
+  {"id": 1, "country_id": 1, "name": "California"},
+  {"id": 2, "country_id": 1, "name": "Texas"},
+  {"id": 3, "country_id": 1, "name": "New York"},
+  {"id": 4, "country_id": 1, "name": "Florida"},
+
+  {"id": 5, "country_id": 2, "name": "Ontario"},
+  {"id": 6, "country_id": 2, "name": "Quebec"},
+  {"id": 7, "country_id": 2, "name": "British Columbia"},
+  {"id": 8, "country_id": 2, "name": "Alberta"},
+
+  {"id": 9, "country_id": 3, "name": "Bavaria"},
+  {"id": 10, "country_id": 3, "name": "Berlin"},
+  {"id": 11, "country_id": 3, "name": "Hamburg"},
+  {"id": 12, "country_id": 3, "name": "Saxony"},
+
+  {"id": 13, "country_id": 4, "name": "São Paulo"},
+  {"id": 14, "country_id": 4, "name": "Rio de Janeiro"},
+  {"id": 15, "country_id": 4, "name": "Bahia"},
+  {"id": 16, "country_id": 4, "name": "Paraná"},
+
+  {"id": 17, "country_id": 5, "name": "Maharashtra"},
+  {"id": 18, "country_id": 5, "name": "Karnataka"},
+  {"id": 19, "country_id": 5, "name": "Gujarat"},
+  {"id": 20, "country_id": 5, "name": "Punjab"},
+
+  {"id": 21, "country_id": 6, "name": "New South Wales"},
+  {"id": 22, "country_id": 6, "name": "Victoria"},
+  {"id": 23, "country_id": 6, "name": "Queensland"},
+  {"id": 24, "country_id": 6, "name": "Tasmania"},
+
+  {"id": 25, "country_id": 7, "name": "Île-de-France"},
+  {"id": 26, "country_id": 7, "name": "Provence-Alpes-Côte d’Azur"},
+  {"id": 27, "country_id": 7, "name": "Nouvelle-Aquitaine"},
+  {"id": 28, "country_id": 7, "name": "Occitanie"},
+
+  {"id": 29, "country_id": 8, "name": "Tokyo"},
+  {"id": 30, "country_id": 8, "name": "Osaka"},
+  {"id": 31, "country_id": 8, "name": "Hokkaido"},
+  {"id": 32, "country_id": 8, "name": "Fukuoka"},
+
+  {"id": 33, "country_id": 9, "name": "Gauteng"},
+  {"id": 34, "country_id": 9, "name": "Western Cape"},
+  {"id": 35, "country_id": 9, "name": "KwaZulu-Natal"},
+  {"id": 36, "country_id": 9, "name": "Limpopo"},
+
+  {"id": 37, "country_id": 10, "name": "Istanbul"},
+  {"id": 38, "country_id": 10, "name": "Ankara"},
+  {"id": 39, "country_id": 10, "name": "Izmir"},
+  {"id": 40, "country_id": 10, "name": "Antalya"}
+]
