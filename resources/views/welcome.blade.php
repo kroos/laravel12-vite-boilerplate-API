@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="col-sm-12 d-flex flex-column align-items-center justify-content-center">
+<div class="col-sm-12">
 
-	<div class="col-sm-8 row justify-content-center align-items-center m-2 border border-success">
+	<div class="col-sm-12 row justify-content-center align-items-center my-2 m-0 border border-success">
 		<h1 class="text-center animate__animated animate__bounce">An animated element</h1>
 	</div>
 
-	<div class="col-sm-8 row text-center align-items-center m-2 border border-success">
+	<div class="col-sm-12 row text-center align-items-center my-2 m-0 border border-success">
 		<div class="tw">
 			<p class="text-3xl font-bold underline">Hello tailwindcss</p>
 			<button class="btn btn-primary">Bootstrap Button</button>
@@ -16,12 +16,12 @@
 		<p>{{ __('<div class="tw"><p class="text-3xl font-bold underline">Hello tailwindcss</p></div>') }}</p>
 	</div>
 
-	<div class="col-sm-8 row justify-content-center align-items-center m-2 border border-success">
+	<div class="col-sm-12 row justify-content-center align-items-center my-1 m-0 border border-success">
 		<p class="">Placeholder text to demonstrate some <a href="#" data-toggle="tooltip" data-bs-title="Default tooltip">inline links</a> with tooltips. This is now just filler, no killer. Content placed here just to mimic the presence of <a href="#" data-toggle="tooltip" data-bs-title="Another tooltip">real text</a>. And all that just to give you an idea of how tooltips would look when used in real-world situations. So hopefully you've now seen how <a href="#" data-toggle="tooltip" data-bs-title="Another one here too">these tooltips on links</a> can work in practice, once you use them on <a href="#" data-toggle="tooltip" data-bs-title="The last tip!">your own</a> site or project.
 		</p>
 	</div>
 
-	<div class="col-sm-8 row justify-content-center align-items-center m-2 border border-success">
+	<div class="col-sm-12 row justify-content-center align-items-center my-2 m-0 border border-success">
 		<div class="row col-sm-6 border border-primary">
 			<label for="select2" class="col-form-label col-sm-4">Select 2:</label>
 			<div class="col-sm-8 my-auto">
@@ -34,7 +34,7 @@
 		</div>
 	</div>
 
-	<div class="col-sm-8 row justify-content-center align-items-center m-2 border border-success">
+	<div class="col-sm-12 row justify-content-center align-items-center my-2 m-0 border border-success">
 		<div class="row col-sm-6 border border-primary">
 			<label for="dp" class="col-form-label col-sm-4">jQuery-ui Datepicker:</label>
 			<div class="col-sm-8 my-auto">
@@ -55,7 +55,7 @@
 </figure>
 </div>
 
-<div class="col-sm-8 row justify-content-center align-items-center m-2 border border-success">
+<div class="col-sm-12 row justify-content-center align-items-center my-2 m-0 border border-success">
 	<div class="col-sm-4 my-auto">
 		<button id="button1" class="m-1 btn btn-primary"><i class="fa-regular fa-user fa-beat"></i> Primary button</button>
 		<button id="button2" class="m-1 btn btn-secondary"><i class="fa-solid fa-bomb fa-beat"></i> secondary button</button>
@@ -64,7 +64,7 @@
 	</div>
 </div>
 
-<div class="col-sm-8 row justify-content-center align-items-center m-2 border border-success">
+<div class="col-sm-12 row justify-content-center align-items-center my-2 m-0 border border-success">
 	<h2>1 And 2 Tier Dynamic Inputs (with Form)</h2>
 
 	<form id="myForm" action="{{ route('welcome') }}" method="post">
@@ -89,7 +89,7 @@
 	</form>
 </div>
 
-<div class="col-sm-8 row justify-content-center align-items-center m-2 border border-success">
+<div class="col-sm-12 row justify-content-center align-items-center my-2 m-0 border border-success">
 	<table id="table_id" class="table table-sm table-hover">
 		<thead>
 			<tr>
@@ -226,11 +226,11 @@
 	</table>
 </div>
 
-<div class="col-sm-8 row justify-content-center align-items-center m-2 border border-success">
+<div class="col-sm-12 row justify-content-center align-items-center my-2 m-0 border border-success">
 	<canvas id="myChart"></canvas>
 </div>
 
-<div class="col-sm-8 row justify-content-center align-items-center m-2 border border-success">
+<div class="col-sm-12 row justify-content-center align-items-center my-2 m-0 border border-success">
 	<div id="calendar"></div>
 </div>
 </div>
@@ -284,115 +284,6 @@ $('#table_id').DataTable({
 });
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-// 2 tier dynamic input
-$("#skills_wrap").remAddRow({
-	addBtn: "#skills_add",
-	maxFields: 3,
-	fieldName: "skills",
-	rowIdPrefix: "skill",
-	removeSelector: ".skill_remove",
-	rowTemplate: (i, name) => `
-	<div class="col-sm-12 m-1 row g-3 border border-primary rounded" id="skill_${i}">
-		<div class="col-sm-12 m-0 row g-3">
-			<label for="name_${i}" class="form-label col-sm-3">Name #${i+1}</label>
-			<div class="col-sm-9 row @error('skills.*.name') is-invalid @enderror">
-				<div class="col-sm-10 my-auto">
-					<input type="text" name="${name}[${i}][name]" value="{{ old('skills.*.name') }}" id="name_${i}" class="form-control form-control-sm @error('skills.*.name') is-invalid @enderror" placeholder="Name ${i+1}">
-				</div>
-			</div>
-			@error('skills.*.name')
-			<div class="invalid-feedback">
-				{{ $message }}
-			</div>
-			@enderror
-		</div>
-		<div class="col-sm-12 m-0 row g-3">
-			<label for="sk_${i}" class="form-label col-sm-3">Skill #${i+1}</label>
-			<div class="col-sm-9 row my-auto @error('skills.*.skill') is-invalid @enderror">
-				<div class="col-sm-10 m-0">
-					<input type="text" name="${name}[${i}][skill]" value="{{ old('skills.*.skill') }}" id="sk_${i}" class="form-control form-control-sm @error('skills.*.skill') is-invalid @enderror" placeholder="Skill ${i+1}">
-				</div>
-				<div class="col-sm-1 m-1">
-					<button class="btn btn-sm btn-outline-danger skill_remove" data-id="${i}">
-						<i class="fa-regular fa-trash-can fa-beat"></i>
-					</button>
-				</div>
-			</div>
-			@error('skills.*.skill')
-			<div class="invalid-feedback">
-				{{ $message }}
-			</div>
-			@enderror
-		</div>
-
-		<!-- Sub-skills wrapper -->
-		<div class="col-sm-9 offset-sm-3 mt-1 mb-1 border border-primary-subtle rounded">
-			<div id="subskill_wrap_${i}">
-			</div>
-			<button type="button" id="subskill_add_${i}" class="m-1 btn btn-sm btn-primary">+ Add Sub-skill</button>
-		</div>
-
-	</div>
-	`,
-	onAdd: (i, $row1) => {
-		console.log("Skill added:", "skill_"+i, $row1);
-
-		// initialize sub-skills for this skill
-		$(`#subskill_wrap_${i}`).remAddRow({
-			addBtn: `#subskill_add_${i}`,
-			maxFields: 5,
-			fieldName: `skills[${i}][subskills]`,
-			rowIdPrefix: `subskill_${i}`,
-			rowTemplate: (j, name) => `
-			<div class="col-sm-12 m-1 row g-2 border border-info-subtle rounded" id="subskill_${i}_${j}">
-				<div class="col-sm-12 m-1 row g-2">
-					<label for="sbsk_${j}" class="form-label col-sm-2">Sub-skill #${j+1}</label>
-					<div class="col-sm-8 my-auto @error('skills.*.subskills.*.subskill') is-invalid @enderror">
-						<input type="text" name="${name}[${j}][subskill]" value="{{ old('skills.*.subskills.*.subskill') }}" id="sbsk_${j}" class="form-control form-control-sm @error('skills.*.subskills.*.subskill') is-invalid @enderror" placeholder="Sub-skill ${j+1}">
-					</div>
-					@error('skills.*.subskills.*.subskill')
-					<div class="invalid-feedback">
-						{{ $message }}
-					</div>
-					@enderror
-				</div>
-
-				<div class="col-sm-12 m-1 row g-2">
-					<label for="sbsky_${j}" class="form-label col-sm-2">Years #${j+1}</label>
-					<div class="col-sm-8 my-auto @error('skills.*.subskills.*.years') is-invalid @enderror">
-						<input type="text" name="${name}[${j}][years]" value="{{ old('skills.*.subskills.*.years') }}" id="sbsky_${j}" class="form-control form-control-sm @error('skills.*.subskills.*.years') is-invalid @enderror" placeholder="Years ${j+1}">
-					</div>
-					<div class="col-sm-1">
-						<button class="btn btn-sm btn-outline-danger subskill_remove" data-id="${j}">
-							<i class="fa-regular fa-trash-can fa-beat"></i>
-						</button>
-					</div>
-					@error('skills.*.subskills.*.years')
-					<div class="invalid-feedback">
-						{{ $message }}
-					</div>
-					@enderror
-				</div>
-
-
-
-			</div>
-			`,
-			removeSelector: ".subskill_remove",
-			onAdd: (j, $row2) => {
-				console.log("Sub-skill added:", `skill_${i}_${j}`, $row2);
-			},
-			onRemove: (j) => {
-				console.log("Sub-skill removed:", `skill_${i}_${j}`);
-			}
-		});
-	},
-	onRemove: (i) => {
-		console.log("Skill removed:", "skill_"+i);
-	}
-});
-
-///////////////////////////////////////////////////////////////////////////////////////////
 // Experiences (fieldName "experiences")
 $("#experience_wrap").remAddRow({
 	addBtn: "#experience_add",
@@ -434,6 +325,112 @@ $("#experience_wrap").remAddRow({
 });
 
 ///////////////////////////////////////////////////////////////////////////////////////////
+// 2 tier dynamic input
+$("#skills_wrap").remAddRow({
+	addBtn: "#skills_add",
+	maxFields: 3,
+	fieldName: "skills",
+	rowIdPrefix: "skill",
+	removeSelector: ".skill_remove",
+	rowTemplate: (i, name) => `
+	<div class="col-sm-12 m-1 row border border-primary rounded" id="skill_${i}">
+		<div class="col-sm-12 m-0 row">
+			<label for="name_${i}" class="form-label col-sm-3">Name #${i+1}</label>
+			<div class="col-sm-9 row">
+				<div class="col-sm-10 my-auto">
+					<input type="text" name="${name}[${i}][name]" value="{{ old('skills.*.name') }}" id="name_${i}" class="form-control form-control-sm @error('skills.*.name') is-invalid @enderror" placeholder="Name ${i+1}">
+					@error('skills.*.name')
+					<div class="invalid-feedback">
+						{{ $message }}
+					</div>
+					@enderror
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-12 m-0 row">
+			<label for="sk_${i}" class="form-label col-sm-3">Skill #${i+1}</label>
+			<div class="col-sm-9 row my-auto">
+				<div class="col-sm-10 m-0">
+					<input type="text" name="${name}[${i}][skill]" value="{{ old('skills.*.skill') }}" id="sk_${i}" class="form-control form-control-sm @error('skills.*.skill') is-invalid @enderror" placeholder="Skill ${i+1}">
+					@error('skills.*.skill')
+					<div class="invalid-feedback">
+						{{ $message }}
+					</div>
+					@enderror
+				</div>
+				<div class="col-sm-1 m-1">
+					<button class="btn btn-sm btn-outline-danger skill_remove" data-id="${i}">
+						<i class="fa-regular fa-trash-can fa-beat"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- Sub-skills wrapper -->
+		<div class="col-sm-9 offset-sm-3 my-1 border border-primary-subtle rounded">
+			<div id="subskill_wrap_${i}">
+			</div>
+			<button type="button" id="subskill_add_${i}" class="m-1 btn btn-sm btn-primary">+ Add Sub-skill</button>
+		</div>
+
+	</div>
+	`,
+	onAdd: (i, $row1) => {
+		console.log("Skill added:", "skill_"+i, $row1);
+
+		// initialize sub-skills for this skill
+		$(`#subskill_wrap_${i}`).remAddRow({
+			addBtn: `#subskill_add_${i}`,
+			maxFields: 5,
+			fieldName: `skills[${i}][subskills]`,
+			rowIdPrefix: `subskill_${i}`,
+			rowTemplate: (j, name) => `
+			<div class="col-sm-12 m-1 row border border-info-subtle rounded" id="subskill_${i}_${j}">
+				<div class="col-sm-12 m-1 row">
+					<label for="sbsk_${j}" class="form-label col-sm-2">Sub-skill #${j+1}</label>
+					<div class="col-sm-8 my-auto">
+						<input type="text" name="${name}[${j}][subskill]" value="{{ old('skills.*.subskills.*.subskill') }}" id="sbsk_${j}" class="form-control form-control-sm @error('skills.*.subskills.*.subskill') is-invalid @enderror" placeholder="Sub-skill ${j+1}">
+						@error('skills.*.subskills.*.subskill')
+						<div class="invalid-feedback">
+							{{ $message }}
+						</div>
+						@enderror
+					</div>
+				</div>
+
+				<div class="col-sm-12 m-1 row">
+					<label for="sbsky_${j}" class="form-label col-sm-2">Years #${j+1}</label>
+					<div class="col-sm-8 my-auto">
+						<input type="text" name="${name}[${j}][years]" value="{{ old('skills.*.subskills.*.years') }}" id="sbsky_${j}" class="form-control form-control-sm @error('skills.*.subskills.*.years') is-invalid @enderror" placeholder="Years ${j+1}">
+						@error('skills.*.subskills.*.years')
+						<div class="invalid-feedback">
+							{{ $message }}
+						</div>
+						@enderror
+					</div>
+					<div class="col-sm-1">
+						<button class="btn btn-sm btn-outline-danger subskill_remove" data-id="${j}">
+							<i class="fa-regular fa-trash-can fa-beat"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+			`,
+			removeSelector: ".subskill_remove",
+			onAdd: (j, $row2) => {
+				console.log("Sub-skill added:", `skill_${i}_${j}`, $row2);
+			},
+			onRemove: (j) => {
+				console.log("Sub-skill removed:", `skill_${i}_${j}`);
+			}
+		});
+	},
+	onRemove: (i) => {
+		console.log("Skill removed:", "skill_"+i);
+	}
+});
+
+///////////////////////////////////////////////////////////////////////////////////////////
 // Countries (fieldName "countries")
 let selectedStates = []; // globally track selected state IDs
 $("#countries_wrap").remAddRow({
@@ -443,37 +440,37 @@ $("#countries_wrap").remAddRow({
 	fieldName: "countries",
 	rowIdPrefix: "ctry",
 	rowTemplate: (i, name) => `
-		<div class="col-sm-12 row m-0 mb-1 mt-1 g-2 border border-warning-subtle rounded" id="ctry_${i}">
-			<div class="col-sm-10 row m-0 mb-1 mt-1Country g-2">
+		<div class="col-sm-12 row m-0 my-1 border border-warning-subtle rounded" id="ctry_${i}">
+			<div class="col-sm-10 row m-0 my-1">
 				<label for="country_${i}" class="col-sm-2 form-label">Country : </label>
-				<div class="col-sm-10 @error('countries.*.country_id') is-invalid @enderror">
+				<div class="col-sm-10">
 					<select name="${name}[${i}][country_id]" id="country_${i}" class="form-select form-select-sm @error('countries.*.country_id') is-invalid @enderror">
 						<option value="">Please choose</option>
 					</select>
+					@error('countries.*.country_id')
+					<div class="invalid-feedback">
+						{{ $message }}
+					</div>
+					@enderror
 				</div>
-				@error('countries.*.country_id')
-				<div class="invalid-feedback">
-					{{ $message }}
-				</div>
-				@enderror
 			</div>
-			<div class="col-sm-10 row m-0 mb-1 mt-1Country g-2">
+			<div class="col-sm-10 row m-0 my-1">
 				<label for="state_${i}" class="col-sm-2 form-label">State : </label>
-				<div class="col-sm-9 @error('countries.*.state_id') is-invalid @enderror">
+				<div class="col-sm-9 my-auto">
 					<select name="${name}[${i}][state_id]" id="state_${i}" class="form-select form-select-sm @error('countries.*.state_id') is-invalid @enderror">
 						<option value="">Please choose</option>
 					</select>
+					@error('countries.*.state_id')
+					<div class="invalid-feedback">
+						{{ $message }}
+					</div>
+					@enderror
 				</div>
-				<div class="col-sm-1 m-0 my-auto">
+				<div class="col-sm-1">
 					<button class="btn btn-sm btn-outline-danger country_remove" data-id="${i}">
 						<i class="fa-regular fa-trash-can fa-beat"></i>
 					</button>
 				</div>
-				@error('countries.*.state_id')
-				<div class="invalid-feedback">
-					{{ $message }}
-				</div>
-				@enderror
 			</div>
 		</div>
 	`,
