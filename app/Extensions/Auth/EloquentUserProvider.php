@@ -95,7 +95,12 @@ class EloquentUserProvider extends UserProvider
 		return $rememberToken && hash_equals($rememberToken, $token) ? $retrievedModel : null;
 	}
 
-
+//	to prevent laravel AUTO hash password in DB if its used plain or or uses an old hashing driver
+//	public function rehashPasswordIfRequired($user, array $credentials, $validated = true)
+//	{
+//    // Disable Laravel’s auto password rehash feature
+//		return;
+//	}
 
 //	public function validateCredentials(UserContract $user, array $credentials)
 //	{
