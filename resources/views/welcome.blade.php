@@ -69,23 +69,7 @@
 
 	<form id="myForm" action="{{ route('welcome') }}" method="post">
 		@csrf
-
-		<h2>Experiences (1 Tiers Dynamic Input)</h2>
-		<div id="experience_wrap" class="section">
-		</div>
-		<button type="button" id="experience_add" class="btn btn-sm btn-outline-info">+ Add Experience</button>
-		<hr>
-		<h2>Dynamic Skills with Sub-skills (2 Tiers Dynamic Input)</h2>
-		<div id="skills_wrap">
-		</div>
-		<button type="button" id="skills_add" class="m-1 btn btn-sm btn-outline-primary">+ Add Skill</button>
-		<hr>
-		<h2>Dynamic Countries and States (1 Tiers Dynamic Input with Select2)</h2>
-		<div id="countries_wrap">
-		</div>
-		<button type="button" id="countries_add" class="m-1 btn btn-sm btn-outline-primary">+ Add Countries</button>
-		<hr>
-		<button type="submit" class="m-1 btn btn-sm btn-outline-primary"><i class="fa-regular fa-floppy-disk"></i>&nbsp;Submit</button>
+		@include('_form')
 	</form>
 </div>
 
@@ -295,7 +279,7 @@ $("#experience_wrap").remAddRow({
 	<div class="col-sm-12 row g-3 m-1" id="exp_${i}">
 		<div class="form-floating col-sm-4 @error('experiences.*.name') is-invalid @enderror">
 			<input type="text" name="${name}[${i}][name]" id="name_${i}" class="form-control @error('experiences.*.name') is-invalid @enderror">
-			<label for="name_${i}">Name :</label>
+			<label for="name_${i}" class="form-col-label">Name :</label>
 			@error('experiences.*.name')
 			<div class="invalid-feedback">
 				{{ $message }}
@@ -304,7 +288,7 @@ $("#experience_wrap").remAddRow({
 		</div>
 		<div class="form-floating col-sm-4 @error('experiences.*.id') is-invalid @enderror">
 			<input type="text" name="${name}[${i}][id]" id="id_${i}" class="form-control @error('experiences.*.id') is-invalid @enderror">
-			<label for="id_${i}">ID :</label>
+			<label for="id_${i}" class="form-col-label">ID :</label>
 			@error('experiences.*.id')
 			<div class="invalid-feedback">
 				{{ $message }}
@@ -335,10 +319,10 @@ $("#skills_wrap").remAddRow({
 	rowTemplate: (i, name) => `
 	<div class="col-sm-12 m-1 row border border-primary rounded" id="skill_${i}">
 		<div class="col-sm-12 m-0 row">
-			<label for="name_${i}" class="form-label col-sm-3">Name #${i+1}</label>
+			<label for="name_${i}" class="form-col-label col-sm-3">Name #${i+1}</label>
 			<div class="col-sm-9 row">
 				<div class="col-sm-10 my-auto">
-					<input type="text" name="${name}[${i}][name]" value="{{ old('skills.*.name') }}" id="name_${i}" class="form-control form-control-sm @error('skills.*.name') is-invalid @enderror" placeholder="Name ${i+1}">
+					<input type="text" name="${name}[${i}][name]" value="{{ old('skills.*.name', @$variable->name) }}" id="name_${i}" class="form-control form-control-sm @error('skills.*.name') is-invalid @enderror" placeholder="Name ${i+1}">
 					@error('skills.*.name')
 					<div class="invalid-feedback">
 						{{ $message }}
@@ -348,10 +332,10 @@ $("#skills_wrap").remAddRow({
 			</div>
 		</div>
 		<div class="col-sm-12 m-0 row">
-			<label for="sk_${i}" class="form-label col-sm-3">Skill #${i+1}</label>
+			<label for="sk_${i}" class="form-col-label col-sm-3">Skill #${i+1}</label>
 			<div class="col-sm-9 row my-auto">
 				<div class="col-sm-10 m-0">
-					<input type="text" name="${name}[${i}][skill]" value="{{ old('skills.*.skill') }}" id="sk_${i}" class="form-control form-control-sm @error('skills.*.skill') is-invalid @enderror" placeholder="Skill ${i+1}">
+					<input type="text" name="${name}[${i}][skill]" value="{{ old('skills.*.skill', @$variable->skill) }}" id="sk_${i}" class="form-control form-control-sm @error('skills.*.skill') is-invalid @enderror" placeholder="Skill ${i+1}">
 					@error('skills.*.skill')
 					<div class="invalid-feedback">
 						{{ $message }}
@@ -387,9 +371,9 @@ $("#skills_wrap").remAddRow({
 			rowTemplate: (j, name) => `
 			<div class="col-sm-12 m-1 row border border-info-subtle rounded" id="subskill_${i}_${j}">
 				<div class="col-sm-12 m-1 row">
-					<label for="sbsk_${j}" class="form-label col-sm-2">Sub-skill #${j+1}</label>
+					<label for="sbsk_${j}" class="form-col-label col-sm-2">Sub-skill #${j+1}</label>
 					<div class="col-sm-8 my-auto">
-						<input type="text" name="${name}[${j}][subskill]" value="{{ old('skills.*.subskills.*.subskill') }}" id="sbsk_${j}" class="form-control form-control-sm @error('skills.*.subskills.*.subskill') is-invalid @enderror" placeholder="Sub-skill ${j+1}">
+						<input type="text" name="${name}[${j}][subskill]" value="{{ old('skills.*.subskills.*.subskill', @$variable->subskill) }}" id="sbsk_${j}" class="form-control form-control-sm @error('skills.*.subskills.*.subskill') is-invalid @enderror" placeholder="Sub-skill ${j+1}">
 						@error('skills.*.subskills.*.subskill')
 						<div class="invalid-feedback">
 							{{ $message }}
@@ -399,9 +383,9 @@ $("#skills_wrap").remAddRow({
 				</div>
 
 				<div class="col-sm-12 m-1 row">
-					<label for="sbsky_${j}" class="form-label col-sm-2">Years #${j+1}</label>
+					<label for="sbsky_${j}" class="form-col-label col-sm-2">Years #${j+1}</label>
 					<div class="col-sm-8 my-auto">
-						<input type="text" name="${name}[${j}][years]" value="{{ old('skills.*.subskills.*.years') }}" id="sbsky_${j}" class="form-control form-control-sm @error('skills.*.subskills.*.years') is-invalid @enderror" placeholder="Years ${j+1}">
+						<input type="text" name="${name}[${j}][years]" value="{{ old('skills.*.subskills.*.years', @$variable->years) }}" id="sbsky_${j}" class="form-control form-control-sm @error('skills.*.subskills.*.years') is-invalid @enderror" placeholder="Years ${j+1}">
 						@error('skills.*.subskills.*.years')
 						<div class="invalid-feedback">
 							{{ $message }}
@@ -442,7 +426,7 @@ $("#countries_wrap").remAddRow({
 	rowTemplate: (i, name) => `
 		<div class="col-sm-12 row m-0 my-1 border border-warning-subtle rounded" id="ctry_${i}">
 			<div class="col-sm-10 row m-0 my-1">
-				<label for="country_${i}" class="col-sm-2 form-label">Country : </label>
+				<label for="country_${i}" class="col-sm-2 form-col-label">Country : </label>
 				<div class="col-sm-10">
 					<select name="${name}[${i}][country_id]" id="country_${i}" class="form-select form-select-sm @error('countries.*.country_id') is-invalid @enderror">
 						<option value="">Please choose</option>
@@ -455,7 +439,7 @@ $("#countries_wrap").remAddRow({
 				</div>
 			</div>
 			<div class="col-sm-10 row m-0 my-1">
-				<label for="state_${i}" class="col-sm-2 form-label">State : </label>
+				<label for="state_${i}" class="col-sm-2 form-col-label">State : </label>
 				<div class="col-sm-9 my-auto">
 					<select name="${name}[${i}][state_id]" id="state_${i}" class="form-select form-select-sm @error('countries.*.state_id') is-invalid @enderror">
 						<option value="">Please choose</option>
