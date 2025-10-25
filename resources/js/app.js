@@ -56,3 +56,7 @@ import './fullcalendar';
 
 // addRemoveRow
 import	'./addRemoveRowjQueryPlugins';
+
+
+// bootstrap validator 5
+import	'./bootstrapValidator5';
