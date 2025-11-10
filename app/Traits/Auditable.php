@@ -1,5 +1,5 @@
 <?php
-namespace App\Trait;
+namespace App\Traits;
 
 use App\Models\ActivityLog;
 use Illuminate\Support\Facades\Auth;

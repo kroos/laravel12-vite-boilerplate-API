@@ -5,6 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+
+// auditable model
+use App\Traits\Auditable;
+
+// load helper
 use Illuminate\Support\Str;
 
 // db relation class to load
@@ -19,8 +24,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
-	/** @use HasFactory<\Database\Factories\UserFactory> */
-	use HasFactory, Notifiable, SoftDeletes;
+	// notify can be done on User model too
+	use HasFactory, Notifiable, SoftDeletes, Auditable;
 
 	// protected $connection = 'mysql';
 	protected $table = 'users';
@@ -47,9 +52,7 @@ class User extends Authenticatable
 	protected $casts = [
 		'email_verified_at' => 'datetime',
 		// 'active' => 'boolean',
-		// 'password' => 'hashed',		// this is because we are using clear text password
 	];
-
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	public function setNameAttribute($value)

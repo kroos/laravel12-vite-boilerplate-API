@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-// use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 // use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
+// auditable model
 use App\Traits\Auditable;
 
 class Model extends Eloquent {
-    use Auditable, HasFactory;
+	use HasFactory, Auditable;
 
-    protected $guarded = [];
+	protected $guarded = [];
 }

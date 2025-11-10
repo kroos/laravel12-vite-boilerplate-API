@@ -8,6 +8,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 // use Laravel\Sanctum\HasApiTokens;
 
+// auditable model
+use App\Traits\Auditable;
+
 // database relationship
 use Illuminate\Database\Eloquent\SoftDeletes;
 // use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -21,7 +24,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Login extends Authenticatable implements MustVerifyEmail
 {
 	// use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
-	use HasFactory, SoftDeletes;
+	use HasFactory, Notifiable, SoftDeletes, Auditable;
 
 	// protected $connection = 'mysql';
 	protected $table = 'logins';
@@ -105,11 +108,8 @@ class Login extends Authenticatable implements MustVerifyEmail
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// for email Notifiable
-	// https://laravel.com/docs/7.x/notifications
 	public function routeNotificationForMail($notification)
 	{
-		// Return email address only...
-		// return $this->belongtouser->email;
 		return [$this->belongstouser->email => $this->belongstouser->name];
 	}
 
