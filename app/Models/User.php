@@ -27,6 +27,11 @@ class User extends Authenticatable
 	// notify can be done on User model too
 	use HasFactory, Notifiable, SoftDeletes, Auditable;
 
+	// audit
+	// protected static $auditExclude = ['password'];
+	protected static $auditIncludeSnapshot = true;
+	protected static $auditCriticalEvents = ['create', 'updated', 'deleted','force_deleted'];
+
 	// protected $connection = 'mysql';
 	protected $table = 'users';
 	protected $dates = ['deleted_at'];

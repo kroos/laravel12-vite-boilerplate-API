@@ -6,7 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-// use Laravel\Sanctum\HasApiTokens;
+use Laravel\Sanctum\HasApiTokens;
 
 // auditable model
 use App\Traits\Auditable;
@@ -24,7 +24,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Login extends Authenticatable implements MustVerifyEmail
 {
 	// use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
-	use HasFactory, Notifiable, SoftDeletes, Auditable;
+	use HasApiTokens, HasFactory, Notifiable, SoftDeletes, Auditable;
+
+	// audit
+	protected static $auditExclude = ['password','remember_token'];
+	protected static $auditIncludeSnapshot = true;
+	protected static $auditCriticalEvents = ['updated', 'deleted','force_deleted'];
 
 	// protected $connection = 'mysql';
 	protected $table = 'logins';
