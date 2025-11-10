@@ -46,6 +46,7 @@ class User extends Authenticatable
 	 */
 	protected $casts = [
 		'email_verified_at' => 'datetime',
+		// 'active' => 'boolean',
 		// 'password' => 'hashed',		// this is because we are using clear text password
 	];
 

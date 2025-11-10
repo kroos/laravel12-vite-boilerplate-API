@@ -18,18 +18,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 // use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-// custom email reset password in
-// https://laracasts.com/discuss/channels/laravel/how-to-override-the-tomail-function-in-illuminateauthnotificationsresetpasswordphp
-// use App\Notifications\ResetPassword;
-
 class Login extends Authenticatable implements MustVerifyEmail
 {
+	// use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+	use HasFactory, SoftDeletes;
+
 	// protected $connection = 'mysql';
 	protected $table = 'logins';
 	protected $primaryKey = 'id';
-
-	// use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
-	use HasFactory, Notifiable, SoftDeletes;
 
 	 /**
 	 * The attributes that are mass assignable.
@@ -60,7 +56,8 @@ class Login extends Authenticatable implements MustVerifyEmail
 	 * @var array<string, string>
 	 */
 	protected $casts = [
-	// 	'email_verified_at' => 'datetime',
+		 // 'email_verified_at' => 'datetime',
+		 // 'active' => 'boolean',
 		'password' => 'hashed',		// this is because we are using clear text password
 	];
 
