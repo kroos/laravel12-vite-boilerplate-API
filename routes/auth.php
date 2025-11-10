@@ -10,6 +10,8 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\ProfileController;
 
+use App\Http\Controllers\System\ActivityLogController;
+
 
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +26,19 @@ Route::middleware('guest')->group(function () {
 	Route::post('reset-password', [NewPasswordController::class, 'store'])->name('password.store');
 });
 
+Route::middleware(['auth', 'verified'])->group(function () {
+	Route::get('/dashboard', function(){
+		return view('dashboard');
+	})->name('dashboard');
+});
+
+Route::middleware(['auth', 'password.confirm'])->group(function () {
+	Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+	Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+	Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+});
+
 Route::middleware('auth')->group(function () {
 	Route::get('verify-email', EmailVerificationPromptController::class)->name('verification.notice');
 	Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)->middleware(['signed', 'throttle:6,1'])->name('verification.verify');
@@ -32,18 +47,16 @@ Route::middleware('auth')->group(function () {
 	Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
 	Route::put('password', [PasswordController::class, 'update'])->name('password.update');
 	Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
-});
 
-Route::middleware(['auth', 'verified'])->group(function () {
-	Route::get('/dashboard', function(){
-		return view('dashboard');
-	})->name('dashboard');
-});
 
-// Route::middleware('auth')->group(function () {
-Route::middleware(['auth', 'password.confirm'])->group(function () {
-	Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-	Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-	Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+	Route::prefix('activity-logs')->name('activity-logs.')->group(function () {
+		Route::get('/', [ActivityLogController::class, 'index'])->name('index');
+		Route::get('/{log}', [ActivityLogController::class, 'show'])->name('show');
+		Route::delete('/{log}', [ActivityLogController::class, 'destroy'])->name('destroy');
+	})/*->middleware(['auth', 'role:owner'])*/;
+
+
+
 
 });
+

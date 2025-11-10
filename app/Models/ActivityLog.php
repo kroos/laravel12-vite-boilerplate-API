@@ -51,7 +51,7 @@ class ActivityLog extends Model
 	// relationship
 	public function belongstouser(): BelongsTo
 	{
-		return $this->belongsTo(\App\Models\User::class);
+		return $this->belongsTo(\App\Models\User::class, 'user_id');
 	}
 
 	public function model()

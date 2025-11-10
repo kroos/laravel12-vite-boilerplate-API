@@ -1,5 +1,5 @@
 <li class="nav-item">
-	<a class="nav-link" href="#">Features</a>
+	<a class="nav-link" href="{{ route('activity-logs.index') }}">Activity Logs</a>
 </li>
 <li class="nav-item">
 	<a class="nav-link" href="#">Pricing</a>
