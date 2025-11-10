@@ -2,8 +2,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
-// Route::middleware('guest')->group(function () {
-
+Route::middleware('guest')->group(function () {
 	Route::get('/', function () {
 		return view('welcome');
 	});
@@ -50,7 +49,7 @@ use Illuminate\Http\Request;
 
 
 
-// });
+});
 
 
 require __DIR__.'/auth.php';
