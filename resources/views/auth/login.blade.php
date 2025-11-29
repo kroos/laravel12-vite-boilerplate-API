@@ -34,8 +34,8 @@
 					</label>
 				</div>
 			</div>
-			<div class="card-footer">
-				<div class="m-2">
+			<div class="card-footer text-end">
+				<div class="m-0">
 					<button type="submit" class="btn btn-sm btn-primary m-3">
 						{{ __('Log in') }}
 					</button>

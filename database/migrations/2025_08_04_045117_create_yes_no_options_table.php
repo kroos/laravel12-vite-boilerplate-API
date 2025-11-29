@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('binary_options');
+        Schema::dropIfExists('yes_no_options');
     }
 };
