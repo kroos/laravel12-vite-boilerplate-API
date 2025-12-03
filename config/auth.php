@@ -16,7 +16,7 @@ return [
 	'defaults' => [
 		'guard' => env('AUTH_GUARD', 'web'),
 		// 'passwords' => env('AUTH_PASSWORD_BROKER', 'users'),
-		'passwords' => env('AUTH_PASSWORD_BROKER', 'web'),
+		'passwords' => env('AUTH_PASSWORD_BROKER', 'webpassword'),
 	],
 
 	/*
@@ -39,8 +39,8 @@ return [
 	'guards' => [
 		'web' => [
 			'driver' => 'session',
+			'provider' => 'weblogin',
 			// 'provider' => 'users',
-			'provider' => 'logins',
 		],
 	],
 
@@ -66,7 +66,7 @@ return [
 		//     'driver' => 'eloquent',
 		//     'model' => env('AUTH_MODEL', App\Models\User::class),
 		// 'users' => [
-		'logins' => [
+		'weblogin' => [
 			'driver' => 'loginuserprovider',
 			// 'driver' => 'eloquent',
 			'model' => env('AUTH_MODEL', App\Models\Login::class),
@@ -102,9 +102,9 @@ return [
 	'passwords' => [
 		// 'users' => [
 		// this should be a table name for *logins*
-		'web' => [
+		'webpassword' => [
 			// 'provider' => 'users',
-			'provider' => 'logins',
+			'provider' => 'weblogin',
 			'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
 			'expire' => 60,
 			'throttle' => 60,
