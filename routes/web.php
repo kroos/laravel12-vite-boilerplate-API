@@ -45,10 +45,6 @@ Route::middleware('guest')->group(function () {
 			]);
 		return redirect()->back()->with('success', 'Successfully submitted form');
 	})->name('welcome');
-
-
-
-
 });
 
 

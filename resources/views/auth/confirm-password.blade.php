@@ -7,9 +7,10 @@
 
 		<div class="card">
 			<dic class="card-header">
-				<h3>This is a secure area of the application. Please confirm your password before continuing.</h3>
+				<h3>Password Confirmation.</h3>
 			</dic>
 			<div class="card-body">
+				<p>This is a secure area of the application. Please confirm your password before continuing.</p>
 				<div class="form-group row m-2 @error('password') has-error @enderror">
 					<label for="password" class="col-sm-4 col-form-label col-form-label-sm">Password : </label>
 					<div class="col-sm-8 my-auto">
