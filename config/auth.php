@@ -16,7 +16,7 @@ return [
 	'defaults' => [
 		'guard' => env('AUTH_GUARD', 'web'),
 		// 'passwords' => env('AUTH_PASSWORD_BROKER', 'users'),
-		'passwords' => env('AUTH_PASSWORD_BROKER', 'logins'),
+		'passwords' => env('AUTH_PASSWORD_BROKER', 'web'),
 	],
 
 	/*
@@ -102,7 +102,7 @@ return [
 	'passwords' => [
 		// 'users' => [
 		// this should be a table name for *logins*
-		'logins' => [
+		'web' => [
 			// 'provider' => 'users',
 			'provider' => 'logins',
 			'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
