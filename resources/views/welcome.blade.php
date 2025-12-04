@@ -277,6 +277,7 @@ $("#experience_wrap").remAddRow({
 	rowIdPrefix: "exp",
 	rowTemplate: (i, name) => `
 	<div class="col-sm-12 row g-3 m-1" id="exp_${i}">
+		<input type="hidden" name="${name}[${i}][id]">
 		<div class="form-floating col-sm-4 @error('experiences.*.name') is-invalid @enderror">
 			<input type="text" name="${name}[${i}][name]" id="name_${i}" class="form-control @error('experiences.*.name') is-invalid @enderror">
 			<label for="name_${i}" class="form-col-label">Name :</label>
@@ -303,8 +304,15 @@ $("#experience_wrap").remAddRow({
 	onAdd: (i, row) => {
 		console.log("Experience added:", `exp_${i}`, row);
 	},
-	onRemove: (i) => {
+	onRemove: (i, event, $row, name) => {
 		console.log("Experience removed:", `exp_${i}`);
+		event.preventDefault();
+		// console.log('Personnel removed', i, event, $row)
+		const idv = $row.find(`input[name="${name}[${i}][id]"]`).val();
+		if (!idv) {
+			$row.remove();
+			return;
+		}
 	},
 });
 
@@ -318,6 +326,7 @@ $("#skills_wrap").remAddRow({
 	removeSelector: ".skill_remove",
 	rowTemplate: (i, name) => `
 	<div class="col-sm-12 m-1 row border border-primary rounded" id="skill_${i}">
+		<input type="hidden" name="${name}[${i}][id]" value="">
 		<div class="col-sm-12 m-0 row">
 			<label for="name_${i}" class="form-col-label col-sm-3">Name #${i+1}</label>
 			<div class="col-sm-9 row">
@@ -370,6 +379,7 @@ $("#skills_wrap").remAddRow({
 			rowIdPrefix: `subskill_${i}`,
 			rowTemplate: (j, name) => `
 			<div class="col-sm-12 m-1 row border border-info-subtle rounded" id="subskill_${i}_${j}">
+				<input type="hidden" name="${name}[${j}][id]" value="">
 				<div class="col-sm-12 m-1 row">
 					<label for="sbsk_${j}" class="form-col-label col-sm-2">Sub-skill #${j+1}</label>
 					<div class="col-sm-8 my-auto">
@@ -404,13 +414,25 @@ $("#skills_wrap").remAddRow({
 			onAdd: (j, $row2) => {
 				console.log("Sub-skill added:", `skill_${i}_${j}`, $row2);
 			},
-			onRemove: (j) => {
+			onRemove: (j, event, $row2, name) => {
 				console.log("Sub-skill removed:", `skill_${i}_${j}`);
+				event.preventDefault();
+				const idv = $row2.find(`input[name="${name}[${j}][id]"]`).val();
+				if (!idv) {
+					$row2.remove();
+					return;
+				}
 			}
 		});
 	},
-	onRemove: (i) => {
+	onRemove: (i, event, $row, name) => {
 		console.log("Skill removed:", "skill_"+i);
+		event.preventDefault();
+		const idv = $row.find(`input[name="${name}[${i}][id]"]`).val();
+		if (!idv) {
+			$row.remove();
+			return;
+		}
 	}
 });
 
@@ -425,6 +447,7 @@ $("#countries_wrap").remAddRow({
 	rowIdPrefix: "ctry",
 	rowTemplate: (i, name) => `
 		<div class="col-sm-12 row m-0 my-1 border border-warning-subtle rounded" id="ctry_${i}">
+			<input type="hidden" name="${name}[${i}][id]" value="">
 			<div class="col-sm-10 row m-0 my-1">
 				<label for="country_${i}" class="col-sm-2 form-col-label">Country : </label>
 				<div class="col-sm-10">
@@ -439,6 +462,7 @@ $("#countries_wrap").remAddRow({
 				</div>
 			</div>
 			<div class="col-sm-10 row m-0 my-1">
+				<input type="hidden" name="${name}[${i}][id]" value="">
 				<label for="state_${i}" class="col-sm-2 form-col-label">State : </label>
 				<div class="col-sm-9 my-auto">
 					<select name="${name}[${i}][state_id]" id="state_${i}" class="form-select form-select-sm @error('countries.*.state_id') is-invalid @enderror">
@@ -555,12 +579,18 @@ $("#countries_wrap").remAddRow({
 		}
 
 	},
-	onRemove: (i) => {
+	onRemove: (i, event, $row, name) => {
 		console.log("Country removed:", `ctry_${i}`);
 		// When a row is removed, remove its selected state from tracking
 		const stateVal = $(`#state_${i}`).val();
 		if (stateVal) {
 			selectedStates = selectedStates.filter(id => id !== String(stateVal));
+		}
+		event.preventDefault();
+		const idv = $row.find(`input[name="${name}[${i}][id]"]`).val();
+		if (!idv) {
+			$row.remove();
+			return;
 		}
 	},
 });
@@ -574,9 +604,9 @@ $(function () {
     $oldItemsValue = old('items', $itemsArray);
 @endphp
 
-	const oldSkills = @json(old('skills', @$variable?->hasmanyModel()?->get(['column'])?->toArray() ));
-	const oldExperiences = @json(old('experiences', @$variable?->hasmanyModel()?->get(['column'])?->toArray() ));
-	const oldCountries = @json(old('countries', @$variable?->hasmanyModel()?->get(['column'])?->toArray() ));
+	const oldSkills = @json(old('skills', @$variable?->hasmanyModel()?->get(['column'])?->toArray() ?? [] ));
+	const oldExperiences = @json(old('experiences', @$variable?->hasmanyModel()?->get(['column'])?->toArray() ?? [] ));
+	const oldCountries = @json(old('countries', @$variable?->hasmanyModel()?->get(['column'])?->toArray() ?? [] ));
 
 	// === Restore old SKILLS ===
 	if (oldSkills.length > 0) {

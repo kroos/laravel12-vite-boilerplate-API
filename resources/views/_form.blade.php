@@ -1,5 +1,5 @@
 <h2>Experiences (1 Tiers Dynamic Input)</h2>
-<div id="experience_wrap" class="section">
+<div id="experience_wrap">
 </div>
 <button type="button" id="experience_add" class="btn btn-sm btn-outline-info">+ Add Experience</button>
 <hr>
