@@ -1,6 +1,7 @@
 <!-- 2nd nav -->
 <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
 	<div class="container-fluid">
+		<img src="" alt="{!! config('app.name') !!}" title="{!! config('app.name') !!}" width="7%" class="mx-2 my-auto img-responsive img-rounded">
 		<a
 			class="navbar-brand"
 			@auth
@@ -10,7 +11,7 @@
 			@endauth
 		>
 			{!! config('app.name') !!}
-			<img src="">
+			<img src="" width="7%" class="mx-2 my-auto img-responsive img-rounded">
 		</a>
 
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
