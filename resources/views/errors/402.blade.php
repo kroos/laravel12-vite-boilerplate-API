@@ -1,5 +1,15 @@
-@extends('errors::minimal')
+@extends('layouts.app')
 
-@section('title', __('Payment Required'))
-@section('code', '402')
-@section('message', __('Payment Required'))
+@section('content')
+	<div class="tw col-sm-8 text-center">
+		<h2 class="font-semibold text-xl text-gray-800 leading-tight">
+			{{ __('Error 402 : Payment Required') }}
+		</h2>
+	</div>
+	<div class="col-sm-8 flex justify-content-center" >
+		<a href="{{ url('/dashboard') }}" class="">
+			<img src="{{ asset('images/errors/402-error.jpg') }}" class="img-fluid rounded " alt="">
+		</a>
+	</div>
+@endsection
+
