@@ -13,8 +13,12 @@ return new class extends Migration
 	{
 		Schema::create('logins', function (Blueprint $table) {
 			$table->id();
-			$table->foreignId('user_id')->nullable()->index();
-			$table->string('username')->unique();
+			$table->foreignId('user_id')
+						->nullable()
+						->constrained()
+						->nullOnDelete();
+			$table->string('username', 191)->unique();
+			$table->string('slug', 191)->unique();
 			$table->string('password');
 			// $table->boolean('active');
 			$table->rememberToken();

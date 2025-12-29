@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('yes_no_options', function (Blueprint $table) {
             $table->id();
             $table->string('option');
+            $table->string('slug', 191)->unique();
             $table->string('value');
             $table->timestamps();
             $table->softDeletes();
