@@ -20,7 +20,6 @@
         "barryvdh/laravel-dompdf": "^3.0",
         "cviebrock/eloquent-sluggable": "^12.0",
         "fakerphp/faker": "^1.23",
-        "intervention/image": "^3.11",
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.41",
