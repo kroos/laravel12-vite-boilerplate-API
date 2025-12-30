@@ -17,6 +17,10 @@
 		</div>
 		<p>If you want to use tailwindcss class, please wrap it with "tw" class. This has been made to resolve conflicts between bootstrap and tailwindcss</p>
 		<p>{{ __('<div class="tw"><p class="text-3xl font-bold underline">Hello tailwindcss</p></div>') }}</p>
+		<div class="form-check form-switch">
+			<input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+			<label class="form-check-label" for="switchCheckDefault">Default switch checkbox input</label>
+		</div>
 	</div>
 
 	<div class="col-sm-12 row justify-content-center align-items-center my-1 m-0 border border-success">
