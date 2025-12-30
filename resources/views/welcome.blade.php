@@ -10,7 +10,10 @@
 	<div class="col-sm-12 row text-center align-items-center my-2 m-0 border border-success">
 		<div class="tw">
 			<p class="text-3xl font-bold underline">Hello tailwindcss</p>
-			<button class="btn btn-primary">Bootstrap Button</button>
+			<div class="bg-green-500 text-white px-4 py-2 rounded mb-2">
+				Tailwind v3 + Laravel Mix works 🎉
+			</div>
+			<button class="btn btn-sm btn-primary">Bootstrap Button</button>
 		</div>
 		<p>If you want to use tailwindcss class, please wrap it with "tw" class. This has been made to resolve conflicts between bootstrap and tailwindcss</p>
 		<p>{{ __('<div class="tw"><p class="text-3xl font-bold underline">Hello tailwindcss</p></div>') }}</p>
@@ -19,6 +22,20 @@
 	<div class="col-sm-12 row justify-content-center align-items-center my-1 m-0 border border-success">
 		<p class="">Placeholder text to demonstrate some <a href="#" data-toggle="tooltip" data-bs-title="Default tooltip">inline links</a> with tooltips. This is now just filler, no killer. Content placed here just to mimic the presence of <a href="#" data-toggle="tooltip" data-bs-title="Another tooltip">real text</a>. And all that just to give you an idea of how tooltips would look when used in real-world situations. So hopefully you've now seen how <a href="#" data-toggle="tooltip" data-bs-title="Another one here too">these tooltips on links</a> can work in practice, once you use them on <a href="#" data-toggle="tooltip" data-bs-title="The last tip!">your own</a> site or project.
 		</p>
+	</div>
+
+	<div class="col-sm-8 row text-center align-items-center m-2 border border-success">
+		<div class="form-group row m-1 @error('name') has-error @enderror">
+			<label for="minicolor" class="col-form-label col-sm-4">MiniColors : </label>
+			<div class="col-sm-6 my-auto">
+				<input type="text" name="name" value="{{ old('name', @$variable->name) }}" id="minicolor" class="form-control form-control-sm @error('name') is-invalid @enderror" placeholder="MiniColors">
+				@error('name')
+					<div class="invalid-feedback">
+						{{ $message }}
+					</div>
+				@enderror
+			</div>
+		</div>
 	</div>
 
 	<div class="col-sm-12 row justify-content-center align-items-center my-2 m-0 border border-success">
@@ -226,6 +243,10 @@
 $(document).ready(function(){
 	$('[data-toggle="tooltip"]').tooltip();
 });
+
+///////////////////////////////////////////////////////////////////////////////////////////
+$(`#minicolor`).minicolors();
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 $('#button1').click(function(){

@@ -5,7 +5,7 @@
 
 /* Scope Tailwind inside `.tw` */
 :where(.tw) {
-    @tailwind base;
-    @tailwind components;
-    @tailwind utilities;
+	@tailwind base;
+	@tailwind components;
+	@tailwind utilities;
 }
