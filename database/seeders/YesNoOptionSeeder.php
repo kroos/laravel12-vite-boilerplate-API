@@ -16,11 +16,13 @@ class YesNoOptionSeeder extends Seeder
 		YesNoOption::create(
 				[
 					'option' => 'Yes',
+					'slug' => 'yes',
 					'value' => 1,
 				]);
 		YesNoOption::create(
 				[
 					'option' => 'No',
+					'slug' => 'no',
 					'value' => 0,
 				]);
 	}
