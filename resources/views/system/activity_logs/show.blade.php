@@ -3,9 +3,9 @@
 @section('content')
 <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
-    <h5 class="mb-0"><i class="fa fa-search"></i> Log Detail</h5>
+    <h5 class="mb-0"><i class="fa-brands fa-searchengin"></i> Log Detail</h5>
     <a href="{{ route('activity-logs.index') }}" class="btn btn-light btn-sm">
-      <i class="fa fa-arrow-left"></i> Back
+      <i class="fa-regular fa-circle-left"></i> Back
     </a>
   </div>
   <div class="card-body">

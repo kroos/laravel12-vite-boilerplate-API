@@ -3,7 +3,7 @@
 @section('content')
 <div class="card">
 	<div class="card-header d-flex justify-content-between align-items-center">
-		<h5 class="mb-0"><i class="fa fa-history"></i> Activity Logs</h5>
+		<h5 class="mb-0"><i class="fa-solid fa-clock-rotate-left"></i> Activity Logs</h5>
 	</div>
 	<div class="card-body">
 		<table id="logs-table" class="table table-striped table-bordered w-100"></table>
@@ -53,10 +53,10 @@ $('#logs-table').DataTable({
 				return `
 				<div class="btn-group btn-group-sm" role="group">
 					<a href="{{ url('activity-logs') }}/${id}" class="btn btn-outline-primary">
-						<i class="fa fa-eye"></i>
+						<i class="fa-regular fa-eye"></i>
 					</a>
 					<button type="button" class="btn btn-outline-danger btn-del" data-id="${id}">
-						<i class="fa fa-trash"></i>
+						<i class="fa-regular fa-trash-can"></i>
 					</button>
 				</div>
 				`
