@@ -1,0 +1,729 @@
+///////////////////////////////////////////////////////////////////////////////////////////
+// tooltip
+$(document).ready(function(){
+	$('[data-toggle="tooltip"]').tooltip();
+});
+
+///////////////////////////////////////////////////////////////////////////////////////////
+$(`#minicolor`).minicolors({});
+
+///////////////////////////////////////////////////////////////////////////////////////////
+$('#button1').click(function(){
+	alert("Thanks");
+});
+
+///////////////////////////////////////////////////////////////////////////////////////////
+$('#button2').click(function(){
+	swal.fire('Title', 'message', 'info');
+});
+
+///////////////////////////////////////////////////////////////////////////////////////////
+console.log('test');
+
+///////////////////////////////////////////////////////////////////////////////////////////
+$('#select2').select2({
+		placeholder: 'Please choose',
+		allowClear: true,
+		closeOnSelect: true,
+		width: '100%',
+});
+
+///////////////////////////////////////////////////////////////////////////////////////////
+console.log(moment().format('D MMMM YYYY'));
+
+///////////////////////////////////////////////////////////////////////////////////////////
+$("#dp").jqueryuiDatepicker({
+	dateFormat: 'yy-mm-dd',
+}).on('change', function(){
+	$('#form').bootstrapValidator('revalidateField', 'datepicker');
+});
+
+///////////////////////////////////////////////////////////////////////////////////////////
+DataTable.datetime('D MMM YYYY');
+$('#table_id').DataTable({
+	'lengthMenu': [ [30, 60, 100, -1], [30, 60, 100, 'All'] ],
+	'columnDefs': [
+	{ type: 'date', 'targets': [4] },
+	],
+	'order': [[ 0, 'desc' ]],
+	'responsive': true,
+	'autoWidth': false,
+	// 'fixedHeader': true,
+	'dom': 'Bfrtip',
+});
+
+///////////////////////////////////////////////////////////////////////////////////////////
+// Experiences (fieldName "experiences")
+$("#experience_wrap").remAddRow({
+	addBtn: "#experience_add",
+	maxFields: 3,
+	removeSelector: ".exp_remove",
+	fieldName: "experiences",
+	rowIdPrefix: "exp",
+	rowTemplate: (i, name) => `
+	<div class="col-sm-12 row g-3 m-1" id="exp_${i}">
+		<input type="hidden" name="${name}[${i}][id]">
+		<div class="form-floating col-sm-4 @error('experiences.*.name') is-invalid @enderror">
+			<input type="text" name="${name}[${i}][name]" id="name_${i}" class="form-control @error('experiences.*.name') is-invalid @enderror">
+			<label for="name_${i}" class="form-col-label">Name :</label>
+			@error('experiences.*.name')
+			<div class="invalid-feedback">
+				{{ $message }}
+			</div>
+			@enderror
+		</div>
+		<div class="form-floating col-sm-4 @error('experiences.*.id') is-invalid @enderror">
+			<input type="text" name="${name}[${i}][id]" id="id_${i}" class="form-control @error('experiences.*.id') is-invalid @enderror">
+			<label for="id_${i}" class="form-col-label">ID :</label>
+			@error('experiences.*.id')
+			<div class="invalid-feedback">
+				{{ $message }}
+			</div>
+			@enderror
+		</div>
+		<div class="col-sm-1">
+			<button class="btn btn-sm btn-outline-danger exp_remove" data-id="${i}"><i class="fa-solid fa-xmark fa-beat"></i></button>
+		</div>
+	</div>
+	`,
+	onAdd: (i, $r) => {
+		console.log("Experience added:", `exp_${i}`, $r);
+
+		const $field1 = $r.find(`[name="experiences[${i}][name]"]`);
+		const $field2 = $r.find(`[name="experiences[${i}][id]"]`);
+
+		$('#form').bootstrapValidator('addField', $field1, {
+			validators: {
+				notEmpty: {
+					message: 'Please insert name.'
+				}
+			}
+		});
+		$('#form').bootstrapValidator('addField', $field2, {
+			validators: {
+				notEmpty: {
+					message: 'Please insert ID.'
+				}
+			}
+		});
+
+	},
+	onRemove: (i, event, $row, name) => {
+		console.log("Experience removed:", `exp_${i}`);
+		event.preventDefault();
+		// console.log('Personnel removed', i, event, $row)
+		const idv = $row.find(`input[name="${name}[${i}][id]"]`).val();
+
+		const $field1 = $row.find(`[name="experiences[${i}][name]"]`);
+		const $field2 = $row.find(`[name="experiences[${i}][id]"]`);
+
+		if (!idv) {
+			$('#form').bootstrapValidator('removeField', $field1);
+			$('#form').bootstrapValidator('removeField', $field2);
+			$row.remove();
+			return;
+		}
+	},
+});
+
+///////////////////////////////////////////////////////////////////////////////////////////
+// 2 tier dynamic input
+$("#skills_wrap").remAddRow({
+	addBtn: "#skills_add",
+	maxFields: 3,
+	fieldName: "skills",
+	rowIdPrefix: "skill",
+	removeSelector: ".skill_remove",
+	rowTemplate: (i, name) => `
+	<div class="col-sm-12 m-1 row border border-primary rounded" id="skill_${i}">
+		<input type="hidden" name="${name}[${i}][id]" value="">
+		<div class="col-sm-12 form-group m-0 row @error('skills.*.name') has-error @enderror">
+			<label for="name_${i}" class="form-col-label col-sm-3">Name #${i+1}</label>
+			<div class="col-sm-9 row">
+				<div class="col-sm-10 my-auto">
+					<input type="text" name="${name}[${i}][name]" value="{{ old('skills.*.name', @$variable->name) }}" id="name_${i}" class="form-control form-control-sm @error('skills.*.name') is-invalid @enderror" placeholder="Name ${i+1}">
+					@error('skills.*.name')
+					<div class="invalid-feedback">
+						{{ $message }}
+					</div>
+					@enderror
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-12 form-group m-0 row @error('skills.*.skill') has-error @enderror">
+			<label for="sk_${i}" class="form-col-label col-sm-3">Skill #${i+1}</label>
+			<div class="col-sm-9 row my-auto">
+				<div class="col-sm-10 m-0">
+					<input type="text" name="${name}[${i}][skill]" value="{{ old('skills.*.skill', @$variable->skill) }}" id="sk_${i}" class="form-control form-control-sm @error('skills.*.skill') is-invalid @enderror" placeholder="Skill ${i+1}">
+					@error('skills.*.skill')
+					<div class="invalid-feedback">
+						{{ $message }}
+					</div>
+					@enderror
+				</div>
+				<div class="col-sm-1 m-1">
+					<button class="btn btn-sm btn-outline-danger skill_remove" data-id="${i}">
+						<i class="fa-regular fa-trash-can fa-beat"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- Sub-skills wrapper -->
+		<div class="col-sm-9 offset-sm-3 my-1 border border-primary-subtle rounded">
+			<div id="subskill_wrap_${i}">
+			</div>
+			<button type="button" id="subskill_add_${i}" class="m-1 btn btn-sm btn-primary">+ Add Sub-skill</button>
+		</div>
+
+	</div>
+	`,
+	onAdd: (i, $row1) => {
+		console.log("Skill added:", "skill_"+i, $row1);
+
+		const $field1 = $row1.find(`[name="skills[${i}][name]"]`);
+		const $field2 = $row1.find(`[name="skills[${i}][skill]"]`);
+
+		$('#form').bootstrapValidator('addField', $field1, {
+			validators: {
+				notEmpty: {
+					message: 'Please insert name.'
+				}
+			}
+		});
+		$('#form').bootstrapValidator('addField', $field1, {
+			validators: {
+				notEmpty: {
+					message: 'Please insert skill.'
+				}
+			}
+		});
+
+
+		// initialize sub-skills for this skill
+		$(`#subskill_wrap_${i}`).remAddRow({
+			addBtn: `#subskill_add_${i}`,
+			maxFields: 5,
+			fieldName: `skills[${i}][subskills]`,
+			rowIdPrefix: `subskill_${i}`,
+			rowTemplate: (j, name) => `
+			<div class="col-sm-12 m-1 row border border-info-subtle rounded" id="subskill_${i}_${j}">
+				<input type="hidden" name="${name}[${j}][id]" value="">
+				<div class="col-sm-12 form-group m-1 row @error('skills.*.subskills.*.subskill') has-error @enderror">
+					<label for="sbsk_${j}" class="form-col-label col-sm-2">Sub-skill #${j+1}</label>
+					<div class="col-sm-8 my-auto">
+						<input type="text" name="${name}[${j}][subskill]" value="{{ old('skills.*.subskills.*.subskill', @$variable->subskill) }}" id="sbsk_${j}" class="form-control form-control-sm @error('skills.*.subskills.*.subskill') is-invalid @enderror" placeholder="Sub-skill ${j+1}">
+						@error('skills.*.subskills.*.subskill')
+						<div class="invalid-feedback">
+							{{ $message }}
+						</div>
+						@enderror
+					</div>
+				</div>
+
+				<div class="col-sm-12 form-group m-1 row @error('skills.*.subskills.*.years') has-error @enderror">
+					<label for="sbsky_${j}" class="form-col-label col-sm-2">Years #${j+1}</label>
+					<div class="col-sm-8 my-auto">
+						<input type="text" name="${name}[${j}][years]" value="{{ old('skills.*.subskills.*.years', @$variable->years) }}" id="sbsky_${j}" class="form-control form-control-sm @error('skills.*.subskills.*.years') is-invalid @enderror" placeholder="Years ${j+1}">
+						@error('skills.*.subskills.*.years')
+						<div class="invalid-feedback">
+							{{ $message }}
+						</div>
+						@enderror
+					</div>
+					<div class="col-sm-1">
+						<button class="btn btn-sm btn-outline-danger subskill_remove" data-id="${j}">
+							<i class="fa-regular fa-trash-can fa-beat"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+			`,
+			removeSelector: ".subskill_remove",
+			onAdd: (j, $row2) => {
+				console.log("Sub-skill added:", `skill_${i}_${j}`, $row2);
+
+				const $field1 = $row2.find(`[name="skills[${i}][subskills][${j}][subskill]"]`);
+				const $field2 = $row2.find(`[name="skills[${i}][subskills][${j}][years]"]`);
+
+				$('#form').bootstrapValidator('addField', $field1, {
+					validators: {
+						notEmpty: {
+							message: 'Please insert subskill.'
+						}
+					}
+				});
+				$('#form').bootstrapValidator('addField', $field2, {
+					validators: {
+						notEmpty: {
+							message: 'Please insert years.'
+						}
+					}
+				});
+
+
+			},
+			onRemove: (j, event, $row2, name) => {
+				console.log("Sub-skill removed:", `skill_${i}_${j}`);
+				event.preventDefault();
+
+				const $field1 = $row2.find(`[name="${name}subskill"]`);
+				const $field2 = $row2.find(`[name="${name}[${j}][years]`);
+
+				const idv = $row2.find(`input[name="${name}[${j}][id]"]`).val();
+				if (!idv) {
+					$('#form').bootstrapValidator('removeField', $field1);
+					$('#form').bootstrapValidator('removeField', $field2);
+					$row2.remove();
+					return;
+				}
+			}
+		});
+	},
+	onRemove: (i, event, $row, name) => {
+		console.log("Skill removed:", "skill_"+i);
+		event.preventDefault();
+
+		const $field1 = $row.find(`[name="${name}[${i}][name]"]`);
+		const $field2 = $row.find(`[name="${name}[${i}][skill]"]`);
+
+		const idv = $row.find(`input[name="${name}[${i}][id]"]`).val();
+		if (!idv) {
+			$('#form').bootstrapValidator('removeField', $field1);
+			$('#form').bootstrapValidator('removeField', $field2);
+			$row.remove();
+			return;
+		}
+	}
+});
+
+///////////////////////////////////////////////////////////////////////////////////////////
+// Countries (fieldName "countries")
+let selectedStates = []; // globally track selected state IDs
+$("#countries_wrap").remAddRow({
+	addBtn: "#countries_add",
+	maxFields: 3,
+	removeSelector: ".country_remove",
+	fieldName: "countries",
+	rowIdPrefix: "ctry",
+	rowTemplate: (i, name) => `
+		<div class="col-sm-12 row m-0 my-1 border border-warning-subtle rounded" id="ctry_${i}">
+			<input type="hidden" name="${name}[${i}][id]" value="">
+			<div class="col-sm-10 form-group row m-0 my-1 @error('countries.*.country_id') has-error @enderror">
+				<label for="country_${i}" class="col-sm-2 form-col-label">Country : </label>
+				<div class="col-sm-10">
+					<select name="${name}[${i}][country_id]" id="country_${i}" class="form-select form-select-sm @error('countries.*.country_id') is-invalid @enderror">
+						<option value="">Please choose</option>
+					</select>
+					@error('countries.*.country_id')
+					<div class="invalid-feedback">
+						{{ $message }}
+					</div>
+					@enderror
+				</div>
+			</div>
+			<div class="col-sm-10 form-group row m-0 my-1 @error('countries.*.state_id') has-error @enderror">
+				<input type="hidden" name="${name}[${i}][id]" value="">
+				<label for="state_${i}" class="col-sm-2 form-col-label">State : </label>
+				<div class="col-sm-9 my-auto">
+					<select name="${name}[${i}][state_id]" id="state_${i}" class="form-select form-select-sm @error('countries.*.state_id') is-invalid @enderror">
+						<option value="">Please choose</option>
+					</select>
+					@error('countries.*.state_id')
+					<div class="invalid-feedback">
+						{{ $message }}
+					</div>
+					@enderror
+				</div>
+				<div class="col-sm-1">
+					<button class="btn btn-sm btn-outline-danger country_remove" data-id="${i}">
+						<i class="fa-regular fa-trash-can fa-beat"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+	`,
+	onAdd: (i, row) => {
+		console.log("Country added:", `ctry_${i}`, row);
+
+		const $country = $('#country_' + i);
+		const $state = $('#state_' + i);
+
+		// Initialize country select2
+		$country.select2({
+			placeholder: 'Select Country',
+			width: '100%',
+			allowClear: true,
+			closeOnSelect: true,
+			ajax: {
+				url: '{{ route('countries') }}',
+				dataType: 'json',
+				processResults: data => ({ results: data })
+			}
+		});
+
+		// Initialize empty state select2
+		$state.select2({
+			placeholder: 'Select State',
+			width: '100%',
+			allowClear: true,
+			closeOnSelect: true,
+		});
+
+		// When country changes, reload states dynamically
+		$country.on('change', function () {
+			const countryId = $(this).val();
+			$state.val(null).trigger('change');
+			if (countryId) {
+				$state.select2({
+					placeholder: 'Select State',
+					width: '100%',
+					allowClear: true,
+					closeOnSelect: true,
+					ajax: {
+						url: `{{ url('api/states') }}/${countryId}`,
+						dataType: 'json',
+						processResults: data => ({
+							results: data.filter(item => !selectedStates.includes(String(item.id)))
+						})
+					}
+				});
+			}
+		});
+
+		// Track selected state
+		let previousState = null;
+
+		$state.on('select2:select', function (e) {
+			const stateId = e.params.data.id;
+			// Remove previous (if any) and add new
+			if (previousState) {
+				selectedStates = selectedStates.filter(id => id !== String(previousState));
+			}
+			selectedStates.push(String(stateId));
+			previousState = stateId;
+			// Refresh all state dropdowns so they re-filter
+			refreshAllStateDropdowns();
+		});
+
+		$state.on('select2:clear', function () {
+			// If cleared manually
+			if (previousState) {
+				selectedStates = selectedStates.filter(id => id !== String(previousState));
+				previousState = null;
+				refreshAllStateDropdowns();
+			}
+		});
+
+		// Helper: reapply filters on all state select2s
+		function refreshAllStateDropdowns() {
+			$('#countries_wrap select[id^="state_"]').each(function () {
+				const sel = $(this);
+				const countryId = sel.closest('.row').find('select[id^="country_"]').val();
+				if (countryId) {
+					sel.select2({
+						placeholder: 'Select State',
+						width: '100%',
+						allowClear: true,
+						closeOnSelect: true,
+						ajax: {
+							url: `{{ url('api/states') }}/${countryId}`,
+							dataType: 'json',
+							processResults: data => ({
+								results: data.filter(item => !selectedStates.includes(String(item.id)) || sel.val() === String(item.id))
+							})
+						}
+					});
+				}
+			});
+		}
+
+		const $field1 = row.find(`[name="countries[${i}][country_id]"]`);
+		const $field2 = row.find(`[name="countries[${i}][state_id]"]`);
+
+		$('#form').bootstrapValidator('addField', $field1, {
+			validators: {
+				notEmpty: {
+					message: 'Please choose country.'
+				}
+			}
+		});
+		$('#form').bootstrapValidator('addField', $field2, {
+			validators: {
+				notEmpty: {
+					message: 'Please choose state.'
+				}
+			}
+		});
+
+
+	},
+	onRemove: (i, event, $row, name) => {
+		console.log("Country removed:", `ctry_${i}`);
+		// When a row is removed, remove its selected state from tracking
+		const stateVal = $(`#state_${i}`).val();
+		if (stateVal) {
+			selectedStates = selectedStates.filter(id => id !== String(stateVal));
+		}
+		event.preventDefault();
+
+		const $field1 = row.find(`[name="${name}[${i}][country_id]"]`);
+		const $field2 = row.find(`[name="${name}[${i}][state_id]"]`);
+
+		const idv = $row.find(`input[name="${name}[${i}][id]"]`).val();
+		if (!idv) {
+
+			$('#form').bootstrapValidator('removeField', $field1);
+			$('#form').bootstrapValidator('removeField', $field2);
+
+			$row.remove();
+			return;
+		}
+	},
+});
+
+///////////////////////////////////////////////////////////////////////////////////////////
+// restore after fail form process
+$(function () {
+	@php
+	$items = @$variable?->hasmanyModel()?->get(['column']);
+	$itemsArray = $items?->toArray();
+	$oldItemsValue = old('items', $itemsArray);
+	@endphp
+
+	const oldSkills = @json(old('skills', @$variable?->hasmanyModel()?->get(['column'])?->toArray() ?? [] ));
+	const oldExperiences = @json(old('experiences', @$variable?->hasmanyModel()?->get(['column'])?->toArray() ?? [] ));
+	const oldCountries = @json(old('countries', @$variable?->hasmanyModel()?->get(['column'])?->toArray() ?? [] ));
+
+	// === Restore old SKILLS ===
+	if (oldSkills.length > 0) {
+		oldSkills.forEach(function (skill, i) {
+			$("#skills_add").trigger('click'); // simulate add skill
+			const $skill = $("#skills_wrap").children().eq(i);
+
+			// Fill skill name + main skill
+			$skill.find(`input[name="skills[${i}][name]"]`).val(skill.name || '');
+			$skill.find(`input[name="skills[${i}][skill]"]`).val(skill.skill || '');
+
+			// === Restore SUB-SKILLS ===
+			if (skill.subskills && skill.subskills.length > 0) {
+				skill.subskills.forEach(function (sub, j) {
+					$(`#subskill_add_${i}`).trigger('click'); // simulate add sub-skill
+					const $sub = $(`#subskill_wrap_${i}`).children().eq(j);
+					$sub.find(`input[name="skills[${i}][subskills][${j}][subskill]"]`).val(sub.subskill || '');
+					$sub.find(`input[name="skills[${i}][subskills][${j}][years]"]`).val(sub.years || '');
+				});
+			}
+		});
+	}
+
+	// === Restore old EXPERIENCES ===
+	if (oldExperiences.length > 0) {
+		oldExperiences.forEach(function (exp, i) {
+			$("#experience_add").trigger('click'); // simulate add experience
+			const $exp = $("#experience_wrap").children().eq(i);
+			$exp.find(`input[name="experiences[${i}][name]"]`).val(exp.name || '');
+			$exp.find(`input[name="experiences[${i}][id]"]`).val(exp.id || '');
+		});
+	}
+
+	// === Restore old COUNTRIES ===
+	if (oldCountries.length > 0) {
+
+		oldCountries.forEach(function (ctry, i) {
+			// Add row dynamically
+			$("#countries_add").trigger('click');
+
+			// Grab the newly added row
+			const $row = $("#countries_wrap").children().eq(i);
+
+			const $country = $row.find(`select[name="countries[${i}][country_id]"]`);
+			const $state = $row.find(`select[name="countries[${i}][state_id]"]`);
+
+			// --- Restore Country ---
+			if (ctry.country_id) {
+				// Create option element manually
+				const countryOption = new Option('Loading...', ctry.country_id, true, true);
+				$country.append(countryOption).trigger('change');
+
+				// Fetch actual country name asynchronously
+				$.ajax({
+					url: '{{ route('countries') }}',
+					dataType: 'json'
+				}).then(data => {
+					const found = data.find(d => String(d.id) === String(ctry.country_id));
+					if (found) {
+						const option = new Option(found.text, found.id, true, true);
+						$country.empty().append(option).trigger('change');
+					}
+				});
+			}
+
+			// --- Restore State ---
+			if (ctry.state_id && ctry.country_id) {
+				$.ajax({
+					url: `{{ url('api/states') }}/${ctry.country_id}`,
+					dataType: 'json'
+				}).then(data => {
+					const found = data.find(d => String(d.id) === String(ctry.state_id));
+					if (found) {
+						const option = new Option(found.text, found.id, true, true);
+						$state.append(option).trigger('change');
+					}
+				});
+			}
+		});
+	}
+
+});
+
+///////////////////////////////////////////////////////////////////////////////////////////
+const ctx = document.getElementById('myChart');
+new Chart(ctx, {
+	type: 'bar',
+	data: {
+		labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+		datasets: [{
+			label: '# of Votes',
+			data: [12, 19, 3, 5, 2, 3],
+			borderWidth: 1
+		}]
+	},
+	options: {
+		scales: {
+			y: {
+				beginAtZero: true
+			}
+		}
+	}
+});
+
+///////////////////////////////////////////////////////////////////////////////////////////
+let calendarEl = document.getElementById('calendar');
+let calendar = new Calendar(calendarEl, {
+	plugins: [
+		multiMonthPlugin,
+		dayGridPlugin,
+		timeGridPlugin,
+		listPlugin,
+		momentPlugin,
+		bootstrap5Plugin,
+	],
+	aspectRatio: 1.3,
+	height: 2000,
+	weekNumbers: true,
+	titleFormat: 'D MMMM, YYYY',  // momentPlugin
+	themeSystem: 'bootstrap5',   // bootstrap5Plugin
+	initialView: 'multiMonthYear',
+	headerToolbar: {
+		left: 'prev,next today',
+		center: 'title',
+		right: 'multiMonthYear,dayGridMonth,timeGridWeek'
+	},
+
+	// events: {
+		// 	url: '{{ route('dashboard') }}',
+		// 	method: 'GET',
+		// 	extraParams: {
+			// 		_token: '{!! csrf_token() !!}',
+			// 	},
+	// },
+
+		events: [
+		{
+			title: 'Event 1',
+			start: '{{ now() }}', // Date of the event
+			description: 'Description of Event 1'
+		},
+		{
+			title: 'Event 2',
+			start: '{{ now()->subdays(2) }}', // Date and time
+			end: '{{ now()->subday() }}', // Optional end time
+			description: 'Description of Event 2'
+		},
+		{
+			title: 'Event 3',
+			start: '{{ now()->subdays(6) }}',
+			description: 'Description of Event 3'
+		}
+		],
+		eventClick: function(info) {
+			// alert(info.event.title + "\n" + info.event.extendedProps.description);
+			swal.fire({
+				title: info.event.title,
+				text: info.event.extendedProps.description,
+				icon: 'info',
+			});
+		},
+		eventDidMount: function(info) {
+			$(info.el).tooltip({
+				title: info.event.extendedProps.description,
+				placement: 'top',
+				trigger: 'hover',
+				container: 'body'
+			});
+		},
+		eventTimeFormat: { // like '14:30:00'
+		hour: '2-digit',
+		minute: '2-digit',
+		second: '2-digit',
+		hour12: true
+	},
+
+});
+calendar.render();
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// bootstrap validator
+$('#form').bootstrapValidator({
+	fields: {
+		switch: {
+			validators: {
+				notEmpty: {
+					message: 'Please click.'
+				},
+			}
+		},
+		minicolor: {
+			validators: {
+				notEmpty: {
+					message: 'Please choose color.'
+				},
+			}
+		},
+		datepicker: {
+			validators: {
+				notEmpty: {
+					message: 'Please choose date.'
+				},
+				date: {
+					format: 'YYYY-MM-DD',
+					message: 'The date format is not valid. '
+				}
+			}
+		},
+		'image[]': {
+			validators: {
+				notEmpty: {
+					message: 'Please select an image'
+				},
+				file: {
+					extension: 'jpeg,jpg,png,bmp',
+					type: 'image/jpeg,image/png,image/bmp',
+					maxSize: 7990272,   // 3264 * 2448
+					message: 'The selected file is not valid'
+				}
+			}
+		},
+		select2: {
+			validators: {
+				notEmpty: {
+					message: 'Please choose'
+				}
+			}
+		},
+	}
+});
+
+////////////////////////////////////////////////////////////////////////////////////
+
