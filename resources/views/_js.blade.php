@@ -86,11 +86,11 @@ $("#experience_wrap").remAddRow({
 		</div>
 	</div>
 	`,
-	onAdd: (i, $r) => {
-		console.log("Experience added:", `exp_${i}`, $r);
+	onAdd: (i, e, $r, name) => {
+		console.log("Experience added:", `exp_${i}`, e, $r, name);
 
-		const $field1 = $r.find(`[name="experiences[${i}][name]"]`);
-		const $field2 = $r.find(`[name="experiences[${i}][id]"]`);
+		const $field1 = $r.find(`[name="${name}[${i}][name]"]`);
+		const $field2 = $r.find(`[name="${name}[${i}][id]"]`);
 
 		$('#form').bootstrapValidator('addField', $field1, {
 			validators: {
@@ -114,8 +114,8 @@ $("#experience_wrap").remAddRow({
 		// console.log('Personnel removed', i, event, $row)
 		const idv = $row.find(`input[name="${name}[${i}][id]"]`).val();
 
-		const $field1 = $row.find(`[name="experiences[${i}][name]"]`);
-		const $field2 = $row.find(`[name="experiences[${i}][id]"]`);
+		const $field1 = $row.find(`[name="${name}[${i}][name]"]`);
+		const $field2 = $row.find(`[name="${name}[${i}][id]"]`);
 
 		if (!idv) {
 			$('#form').bootstrapValidator('removeField', $field1);
