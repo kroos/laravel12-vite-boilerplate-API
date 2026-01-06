@@ -39,7 +39,7 @@ $("#dp").jqueryuiDatepicker({
 });
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-DataTable.datetime('D MMM YYYY');
+$.fn.dataTable.datetime('D MMM YYYY');
 $('#table_id').DataTable({
 	'lengthMenu': [ [30, 60, 100, -1], [30, 60, 100, 'All'] ],
 	'columnDefs': [
@@ -178,11 +178,12 @@ $("#skills_wrap").remAddRow({
 
 	</div>
 	`,
-	onAdd: (i, $row1) => {
+	onAdd: (i, e, $row1, name) => {
+
 		console.log("Skill added:", "skill_"+i, $row1);
 
-		const $field1 = $row1.find(`[name="skills[${i}][name]"]`);
-		const $field2 = $row1.find(`[name="skills[${i}][skill]"]`);
+		const $field1 = $row1.find(`[name="${name}[${i}][name]"]`);
+		const $field2 = $row1.find(`[name="${name}[${i}][skill]"]`);
 
 		$('#form').bootstrapValidator('addField', $field1, {
 			validators: {
@@ -206,6 +207,7 @@ $("#skills_wrap").remAddRow({
 			maxFields: 5,
 			fieldName: `skills[${i}][subskills]`,
 			rowIdPrefix: `subskill_${i}`,
+			removeSelector: ".subskill_remove",
 			rowTemplate: (j, name) => `
 			<div class="col-sm-12 m-1 row border border-info-subtle rounded" id="subskill_${i}_${j}">
 				<input type="hidden" name="${name}[${j}][id]" value="">
@@ -239,12 +241,12 @@ $("#skills_wrap").remAddRow({
 				</div>
 			</div>
 			`,
-			removeSelector: ".subskill_remove",
-			onAdd: (j, $row2) => {
+			onAdd: (j, e, $row2, name) => {
+
 				console.log("Sub-skill added:", `skill_${i}_${j}`, $row2);
 
-				const $field1 = $row2.find(`[name="skills[${i}][subskills][${j}][subskill]"]`);
-				const $field2 = $row2.find(`[name="skills[${i}][subskills][${j}][years]"]`);
+				const $field1 = $row2.find(`[name="${name}[${j}][subskill]"]`);
+				const $field2 = $row2.find(`[name="${name}[${j}][years]"]`);
 
 				$('#form').bootstrapValidator('addField', $field1, {
 					validators: {
@@ -343,7 +345,7 @@ $("#countries_wrap").remAddRow({
 			</div>
 		</div>
 	`,
-	onAdd: (i, row) => {
+	onAdd: (i, e, row, name) => {
 		console.log("Country added:", `ctry_${i}`, row);
 
 		const $country = $('#country_' + i);
