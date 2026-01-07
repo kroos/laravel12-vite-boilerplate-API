@@ -123,6 +123,57 @@ $("#experience_wrap").remAddRow({
 			$row.remove();
 			return;
 		}
+
+		const titleapp = 'Loan Equipment';
+		const apiUrl = '{{ url('loanequipments') }}';
+		swal.fire({
+			title: `Delete ${titleapp}`,
+			text: `Are you sure to delete ${titleapp}?`,
+			icon: 'info',
+			showCancelButton: true,
+			showLoaderOnConfirm: true,
+			allowOutsideClick: false,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Yes',
+			cancelButtonText: 'Cancel',
+			preConfirm: function() {
+				return new Promise(function(resolve) {
+					$.ajax({
+						url: `${apiUrl}/${idv}`,
+						type: 'DELETE',
+						dataType: 'json',
+						data: {
+								id: `${idv}`,
+								_token : `{{ csrf_token() }}`
+						},
+					})
+					.done(function(response){
+						swal.fire('Accept', response.message, response.status)
+						.then(function(){
+							// window.location.reload(true);
+							// table.ajax.reload(true);
+							// $('#form').bootstrapValidator('removeField', $field1);
+							// $('#form').bootstrapValidator('removeField', $field2);
+						});
+					})
+					.fail(function(){
+						swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
+						// swal.fire('Unauthorised', 'Error 401 : Unauthorised Action!', 'error');
+					})
+				});
+			},
+		})
+		.then((result) => {
+			if (result.dismiss === swal.DismissReason.cancel) {
+				swal.fire('Cancel Action', `${titleapp} is still active.`, 'info')
+			}
+		});
+
+
+
+
+
 	},
 });
 
