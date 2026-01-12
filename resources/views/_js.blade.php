@@ -56,15 +56,16 @@ $('#table_id').DataTable({
 // Experiences (fieldName "experiences")
 $("#experience_wrap").remAddRow({
 	addBtn: "#experience_add",
-	maxFields: 3,
-	removeSelector: ".exp_remove",
+	maxRows: 10,
+	removeClass: "exp_remove",
+	rowSelector: 'exp',
 	fieldName: "experiences",
-	rowIdPrefix: "exp",
+	reindexRowID: ['customAttrib'],
 	rowTemplate: (i, name) => `
-	<div class="col-sm-12 row g-3 m-1" id="exp_${i}">
+	<div class="col-sm-12 row g-3 m-1 exp" id="exp_${i}">
 		<input type="hidden" name="${name}[${i}][id]">
-		<div class="form-floating col-sm-4 @error('experiences.*.name') is-invalid @enderror">
-			<input type="text" name="${name}[${i}][name]" id="name_${i}" class="form-control @error('experiences.*.name') is-invalid @enderror">
+		<div class="form-group form-floating col-sm-4 @error('experiences.*.name') has-error @enderror">
+			<input type="text" name="${name}[${i}][name]" id="name_${i}" class="form-control @error('experiences.*.name') is-invalid @enderror" customAttrib="customAttrib_${i}">
 			<label for="name_${i}" class="form-col-label">Name :</label>
 			@error('experiences.*.name')
 			<div class="invalid-feedback">
@@ -72,107 +73,25 @@ $("#experience_wrap").remAddRow({
 			</div>
 			@enderror
 		</div>
-		<div class="form-floating col-sm-4 @error('experiences.*.id') is-invalid @enderror">
-			<input type="text" name="${name}[${i}][id]" id="id_${i}" class="form-control @error('experiences.*.id') is-invalid @enderror">
+		<div class="form-floating col-sm-4 @error('experiences.*.nameid') is-invalid @enderror">
+			<input type="text" name="${name}[${i}][nameid]" id="id_${i}" class="form-control @error('experiences.*.nameid') is-invalid @enderror" customAttrib="customAttrib_${i}">
 			<label for="id_${i}" class="form-col-label">ID :</label>
-			@error('experiences.*.id')
+			@error('experiences.*.nameid')
 			<div class="invalid-feedback">
 				{{ $message }}
 			</div>
 			@enderror
 		</div>
 		<div class="col-sm-1">
-			<button class="btn btn-sm btn-outline-danger exp_remove" data-id="${i}"><i class="fa-solid fa-xmark fa-beat"></i></button>
+			<button class="btn btn-sm btn-outline-danger exp_remove" data-index="${i}"><i class="fa-solid fa-xmark fa-beat"></i></button>
 		</div>
 	</div>
 	`,
 	onAdd: (i, e, $r, name) => {
 		console.log("Experience added:", `exp_${i}`, e, $r, name);
-
-		const $field1 = $r.find(`[name="${name}[${i}][name]"]`);
-		const $field2 = $r.find(`[name="${name}[${i}][id]"]`);
-
-		$('#form').bootstrapValidator('addField', $field1, {
-			validators: {
-				notEmpty: {
-					message: 'Please insert name.'
-				}
-			}
-		});
-		$('#form').bootstrapValidator('addField', $field2, {
-			validators: {
-				notEmpty: {
-					message: 'Please insert ID.'
-				}
-			}
-		});
-
 	},
 	onRemove: (i, event, $row, name) => {
 		console.log("Experience removed:", `exp_${i}`);
-		event.preventDefault();
-		// console.log('Personnel removed', i, event, $row)
-		const idv = $row.find(`input[name="${name}[${i}][id]"]`).val();
-
-		const $field1 = $row.find(`[name="${name}[${i}][name]"]`);
-		const $field2 = $row.find(`[name="${name}[${i}][id]"]`);
-
-		if (!idv) {
-			$('#form').bootstrapValidator('removeField', $field1);
-			$('#form').bootstrapValidator('removeField', $field2);
-			$row.remove();
-			return;
-		}
-
-		const titleapp = 'Loan Equipment';
-		const apiUrl = '{{ url('loanequipments') }}';
-		swal.fire({
-			title: `Delete ${titleapp}`,
-			text: `Are you sure to delete ${titleapp}?`,
-			icon: 'info',
-			showCancelButton: true,
-			showLoaderOnConfirm: true,
-			allowOutsideClick: false,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			confirmButtonText: 'Yes',
-			cancelButtonText: 'Cancel',
-			preConfirm: function() {
-				return new Promise(function(resolve) {
-					$.ajax({
-						url: `${apiUrl}/${idv}`,
-						type: 'DELETE',
-						dataType: 'json',
-						data: {
-								id: `${idv}`,
-								_token : `{{ csrf_token() }}`
-						},
-					})
-					.done(function(response){
-						swal.fire('Accept', response.message, response.status)
-						.then(function(){
-							// window.location.reload(true);
-							// table.ajax.reload(true);
-							// $('#form').bootstrapValidator('removeField', $field1);
-							// $('#form').bootstrapValidator('removeField', $field2);
-						});
-					})
-					.fail(function(){
-						swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
-						// swal.fire('Unauthorised', 'Error 401 : Unauthorised Action!', 'error');
-					})
-				});
-			},
-		})
-		.then((result) => {
-			if (result.dismiss === swal.DismissReason.cancel) {
-				swal.fire('Cancel Action', `${titleapp} is still active.`, 'info')
-			}
-		});
-
-
-
-
 
 	},
 });
@@ -181,17 +100,23 @@ $("#experience_wrap").remAddRow({
 // 2 tier dynamic input
 $("#skills_wrap").remAddRow({
 	addBtn: "#skills_add",
-	maxFields: 3,
+	maxRows: 3,
 	fieldName: "skills",
-	rowIdPrefix: "skill",
-	removeSelector: ".skill_remove",
+	rowSelector: "skill",
+	removeClass: "skill_remove",
+
+	reindexRowName: ['customName'],
+	reindexRowID: ['customID'],
+	reindexRowIndex:['customIndex'],
+
+
 	rowTemplate: (i, name) => `
-	<div class="col-sm-12 m-1 row border border-primary rounded" id="skill_${i}">
+	<div class="col-sm-12 m-1 row border border-primary rounded skill" id="skill_${i}">
 		<input type="hidden" name="${name}[${i}][id]" value="">
 		<div class="col-sm-12 form-group m-0 row @error('skills.*.name') has-error @enderror">
 			<label for="name_${i}" class="form-col-label col-sm-3">Name #${i+1}</label>
-			<div class="col-sm-9 row">
-				<div class="col-sm-10 my-auto">
+			<div class="col-sm-9 row" customName="${name}[${i}][customName]">
+				<div class="col-sm-10 my-auto" customIndex="${i}" customID="customID_${i}">
 					<input type="text" name="${name}[${i}][name]" value="{{ old('skills.*.name', @$variable->name) }}" id="name_${i}" class="form-control form-control-sm @error('skills.*.name') is-invalid @enderror" placeholder="Name ${i+1}">
 					@error('skills.*.name')
 					<div class="invalid-feedback">
@@ -213,7 +138,7 @@ $("#skills_wrap").remAddRow({
 					@enderror
 				</div>
 				<div class="col-sm-1 m-1">
-					<button class="btn btn-sm btn-outline-danger skill_remove" data-id="${i}">
+					<button class="btn btn-sm btn-outline-danger skill_remove" data-index="${i}">
 						<i class="fa-regular fa-trash-can fa-beat"></i>
 					</button>
 				</div>
@@ -230,11 +155,12 @@ $("#skills_wrap").remAddRow({
 	</div>
 	`,
 	onAdd: (i, e, $row1, name) => {
-
 		console.log("Skill added:", "skill_"+i, $row1);
 
 		const $field1 = $row1.find(`[name="${name}[${i}][name]"]`);
 		const $field2 = $row1.find(`[name="${name}[${i}][skill]"]`);
+
+		// $field1.css({"color": "red", "border": "2px solid red"});
 
 		$('#form').bootstrapValidator('addField', $field1, {
 			validators: {
@@ -243,7 +169,7 @@ $("#skills_wrap").remAddRow({
 				}
 			}
 		});
-		$('#form').bootstrapValidator('addField', $field1, {
+		$('#form').bootstrapValidator('addField', $field2, {
 			validators: {
 				notEmpty: {
 					message: 'Please insert skill.'
@@ -255,12 +181,12 @@ $("#skills_wrap").remAddRow({
 		// initialize sub-skills for this skill
 		$(`#subskill_wrap_${i}`).remAddRow({
 			addBtn: `#subskill_add_${i}`,
-			maxFields: 5,
+			maxRows: 5,
 			fieldName: `skills[${i}][subskills]`,
-			rowIdPrefix: `subskill_${i}`,
-			removeSelector: ".subskill_remove",
+			rowSelector: `subskill_${i}`,
+			removeClass: "subskill_remove",
 			rowTemplate: (j, name) => `
-			<div class="col-sm-12 m-1 row border border-info-subtle rounded" id="subskill_${i}_${j}">
+			<div class="col-sm-12 m-1 row border border-info-subtle rounded subskill_${i}" id="subskill_${i}_${j}">
 				<input type="hidden" name="${name}[${j}][id]" value="">
 				<div class="col-sm-12 form-group m-1 row @error('skills.*.subskills.*.subskill') has-error @enderror">
 					<label for="sbsk_${j}" class="form-col-label col-sm-2">Sub-skill #${j+1}</label>
@@ -285,7 +211,7 @@ $("#skills_wrap").remAddRow({
 						@enderror
 					</div>
 					<div class="col-sm-1">
-						<button class="btn btn-sm btn-outline-danger subskill_remove" data-id="${j}">
+						<button class="btn btn-sm btn-outline-danger subskill_remove" data-index="${j}">
 							<i class="fa-regular fa-trash-can fa-beat"></i>
 						</button>
 					</div>
@@ -318,24 +244,71 @@ $("#skills_wrap").remAddRow({
 			},
 			onRemove: (j, event, $row2, name) => {
 				console.log("Sub-skill removed:", `skill_${i}_${j}`);
-				event.preventDefault();
 
-				const $field1 = $row2.find(`[name="${name}subskill"]`);
+				const $field1 = $row2.find(`[name="${name}[${j}][subskill]"]`);
 				const $field2 = $row2.find(`[name="${name}[${j}][years]`);
 
 				const idv = $row2.find(`input[name="${name}[${j}][id]"]`).val();
 				if (!idv) {
 					$('#form').bootstrapValidator('removeField', $field1);
 					$('#form').bootstrapValidator('removeField', $field2);
-					$row2.remove();
-					return;
+					return true;
 				}
+
+				// swal
+				const titleapp = 'Subskill';
+				const apiUrl = '{{ url('loanequipments') }}';
+				swal.fire({
+					title: `Delete ${titleapp}`,
+					text: `Are you sure to delete ${titleapp}?`,
+					icon: 'info',
+					showCancelButton: true,
+					showLoaderOnConfirm: true,
+					allowOutsideClick: false,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Yes',
+					cancelButtonText: 'Cancel',
+					preConfirm: function() {
+						return new Promise(function(resolve) {
+							$.ajax({
+								url: `${apiUrl}/${idv}`,
+								type: 'DELETE',
+								dataType: 'json',
+								data: {
+										id: `${idv}`,
+										_token : `{{ csrf_token() }}`
+								},
+							})
+							.done(function(response){
+								swal.fire('Accept', response.message, response.status)
+								.then(function(){
+									// window.location.reload(true);
+									// table.ajax.reload(true);
+									// $('#form').bootstrapValidator('removeField', $field1);
+									// $('#form').bootstrapValidator('removeField', $field2);
+									return true;
+								});
+							})
+							.fail(function(){
+								swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
+								// swal.fire('Unauthorised', 'Error 401 : Unauthorised Action!', 'error');
+							})
+						});
+					},
+				})
+				.then((result) => {
+					if (result.dismiss === swal.DismissReason.cancel) {
+						swal.fire('Cancel Action', `${titleapp} is still active.`, 'info')
+					}
+				});
+
+
 			}
 		});
 	},
 	onRemove: (i, event, $row, name) => {
-		console.log("Skill removed:", "skill_"+i);
-		event.preventDefault();
+		console.log("Skill removed:", `skill_${i}`);
 
 		const $field1 = $row.find(`[name="${name}[${i}][name]"]`);
 		const $field2 = $row.find(`[name="${name}[${i}][skill]"]`);
@@ -344,9 +317,60 @@ $("#skills_wrap").remAddRow({
 		if (!idv) {
 			$('#form').bootstrapValidator('removeField', $field1);
 			$('#form').bootstrapValidator('removeField', $field2);
-			$row.remove();
-			return;
+			return true;
 		}
+		// swal
+		const titleapp = 'Skill';
+		const apiUrl = '{{ url('loanequipments') }}';
+		swal.fire({
+			title: `Delete ${titleapp}`,
+			text: `Are you sure to delete ${titleapp}?`,
+			icon: 'info',
+			showCancelButton: true,
+			showLoaderOnConfirm: true,
+			allowOutsideClick: false,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Yes',
+			cancelButtonText: 'Cancel',
+			preConfirm: function() {
+				return new Promise(function(resolve) {
+					$.ajax({
+						url: `${apiUrl}/${idv}`,
+						type: 'DELETE',
+						dataType: 'json',
+						data: {
+								id: `${idv}`,
+								_token : `{{ csrf_token() }}`
+						},
+					})
+					.done(function(response){
+						swal.fire('Accept', response.message, response.status)
+						.then(function(){
+							// window.location.reload(true);
+							// table.ajax.reload(true);
+							// $('#form').bootstrapValidator('removeField', $field1);
+							// $('#form').bootstrapValidator('removeField', $field2);
+							return true;
+						});
+					})
+					.fail(function(){
+						swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
+						// swal.fire('Unauthorised', 'Error 401 : Unauthorised Action!', 'error');
+					})
+				});
+			},
+		})
+		.then((result) => {
+			if (result.dismiss === swal.DismissReason.cancel) {
+				swal.fire('Cancel Action', `${titleapp} is still active.`, 'info')
+			}
+		});
+
+
+
+
+
 	}
 });
 
@@ -355,12 +379,12 @@ $("#skills_wrap").remAddRow({
 let selectedStates = []; // globally track selected state IDs
 $("#countries_wrap").remAddRow({
 	addBtn: "#countries_add",
-	maxFields: 3,
-	removeSelector: ".country_remove",
+	maxRows: 3,
+	removeClass: "country_remove",
 	fieldName: "countries",
-	rowIdPrefix: "ctry",
+	rowSelector: "ctry",
 	rowTemplate: (i, name) => `
-		<div class="col-sm-12 row m-0 my-1 border border-warning-subtle rounded" id="ctry_${i}">
+		<div class="col-sm-12 row m-0 my-1 border border-warning-subtle rounded ctry" id="ctry_${i}">
 			<input type="hidden" name="${name}[${i}][id]" value="">
 			<div class="col-sm-10 form-group row m-0 my-1 @error('countries.*.country_id') has-error @enderror">
 				<label for="country_${i}" class="col-sm-2 form-col-label">Country : </label>
@@ -389,15 +413,15 @@ $("#countries_wrap").remAddRow({
 					@enderror
 				</div>
 				<div class="col-sm-1">
-					<button class="btn btn-sm btn-outline-danger country_remove" data-id="${i}">
+					<button class="btn btn-sm btn-outline-danger country_remove" data-index="${i}">
 						<i class="fa-regular fa-trash-can fa-beat"></i>
 					</button>
 				</div>
 			</div>
 		</div>
 	`,
-	onAdd: (i, e, row, name) => {
-		console.log("Country added:", `ctry_${i}`, row);
+	onAdd: (i, e, $row, name) => {
+		console.log("Country added:", `ctry_${i}`, $row);
 
 		const $country = $('#country_' + i);
 		const $state = $('#state_' + i);
@@ -491,8 +515,8 @@ $("#countries_wrap").remAddRow({
 			});
 		}
 
-		const $field1 = row.find(`[name="countries[${i}][country_id]"]`);
-		const $field2 = row.find(`[name="countries[${i}][state_id]"]`);
+		const $field1 = $row.find(`[name="countries[${i}][country_id]"]`);
+		const $field2 = $row.find(`[name="countries[${i}][state_id]"]`);
 
 		$('#form').bootstrapValidator('addField', $field1, {
 			validators: {
@@ -518,10 +542,9 @@ $("#countries_wrap").remAddRow({
 		if (stateVal) {
 			selectedStates = selectedStates.filter(id => id !== String(stateVal));
 		}
-		event.preventDefault();
 
-		const $field1 = row.find(`[name="${name}[${i}][country_id]"]`);
-		const $field2 = row.find(`[name="${name}[${i}][state_id]"]`);
+		const $field1 = $row.find(`[name="${name}[${i}][country_id]"]`);
+		const $field2 = $row.find(`[name="${name}[${i}][state_id]"]`);
 
 		const idv = $row.find(`input[name="${name}[${i}][id]"]`).val();
 		if (!idv) {
@@ -529,8 +552,7 @@ $("#countries_wrap").remAddRow({
 			$('#form').bootstrapValidator('removeField', $field1);
 			$('#form').bootstrapValidator('removeField', $field2);
 
-			$row.remove();
-			return;
+			return true;
 		}
 	},
 });
