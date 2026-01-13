@@ -83,15 +83,58 @@ $("#experience_wrap").remAddRow({
 			@enderror
 		</div>
 		<div class="col-sm-1">
-			<button class="btn btn-sm btn-outline-danger exp_remove" data-index="${i}"><i class="fa-solid fa-xmark fa-beat"></i></button>
+			<button class="btn btn-sm btn-outline-danger exp_remove" data-id="${i}"><i class="fa-solid fa-xmark fa-beat"></i></button>
 		</div>
 	</div>
 	`,
 	onAdd: (i, e, $r, name) => {
 		console.log("Experience added:", `exp_${i}`, e, $r, name);
 	},
-	onRemove: (i, event, $row, name) => {
+	onRemove: async (i, event, $row, name) => {
 		console.log("Experience removed:", `exp_${i}`);
+
+		const idv = $row.find(`input[name="${name}[${i}][id]"]`).val();
+		if (!idv) {
+			return true;
+		}
+		let url = `{{ url('slippostage') }}`;
+		let dbId = idv;
+		const result = await swal.fire({
+			title: 'Are you sure?',
+			text: "It will be deleted permanently!",
+			type: 'warning',
+			showCancelButton: true,
+			allowOutsideClick: false,
+			showLoaderOnConfirm: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Yes, delete it!'
+		});
+
+		// ❌ Cancel clicked
+		if (result.isDismissed) {
+			await swal.fire('Cancelled', 'Your data is safe from delete', 'info');
+			return false;
+		}
+
+		// 2️⃣ Perform AJAX delete
+		try {
+			const response = await $.ajax({
+				type: 'DELETE',
+				url: `${url}/${dbId}`,
+				data: {
+					_token: `{{ csrf_token() }}`,
+					id: dbId
+				},
+				dataType: 'json'
+			});
+			await swal.fire('Deleted!', response.message, response.status);
+			return true; // ✅ ALLOW plugin to remove row
+		} catch (e) {
+			await swal.fire('Ajax Error', 'Something went wrong with ajax!', 'error');
+			return false; // ❌ BLOCK removal
+		}
+
 
 	},
 });
@@ -242,7 +285,7 @@ $("#skills_wrap").remAddRow({
 
 
 			},
-			onRemove: (j, event, $row2, name) => {
+			onRemove: async (j, event, $row2, name) => {
 				console.log("Sub-skill removed:", `skill_${i}_${j}`);
 
 				const $field1 = $row2.find(`[name="${name}[${j}][subskill]"]`);
@@ -255,59 +298,50 @@ $("#skills_wrap").remAddRow({
 					return true;
 				}
 
-				// swal
-				const titleapp = 'Subskill';
-				const apiUrl = '{{ url('loanequipments') }}';
-				swal.fire({
-					title: `Delete ${titleapp}`,
-					text: `Are you sure to delete ${titleapp}?`,
-					icon: 'info',
+				let url = `{{ url('slippostage') }}`;
+				let dbId = idv;
+				const result = await swal.fire({
+					title: 'Are you sure?',
+					text: "It will be deleted permanently!",
+					type: 'warning',
 					showCancelButton: true,
-					showLoaderOnConfirm: true,
 					allowOutsideClick: false,
+					showLoaderOnConfirm: true,
 					confirmButtonColor: '#3085d6',
 					cancelButtonColor: '#d33',
-					confirmButtonText: 'Yes',
-					cancelButtonText: 'Cancel',
-					preConfirm: function() {
-						return new Promise(function(resolve) {
-							$.ajax({
-								url: `${apiUrl}/${idv}`,
-								type: 'DELETE',
-								dataType: 'json',
-								data: {
-										id: `${idv}`,
-										_token : `{{ csrf_token() }}`
-								},
-							})
-							.done(function(response){
-								swal.fire('Accept', response.message, response.status)
-								.then(function(){
-									// window.location.reload(true);
-									// table.ajax.reload(true);
-									// $('#form').bootstrapValidator('removeField', $field1);
-									// $('#form').bootstrapValidator('removeField', $field2);
-									return true;
-								});
-							})
-							.fail(function(){
-								swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
-								// swal.fire('Unauthorised', 'Error 401 : Unauthorised Action!', 'error');
-							})
-						});
-					},
-				})
-				.then((result) => {
-					if (result.dismiss === swal.DismissReason.cancel) {
-						swal.fire('Cancel Action', `${titleapp} is still active.`, 'info')
-					}
+					confirmButtonText: 'Yes, delete it!'
 				});
 
+				// ❌ Cancel clicked
+				if (result.isDismissed) {
+					await swal.fire('Cancelled', 'Your data is safe from delete', 'info');
+					return false;
+				}
+
+				// 2️⃣ Perform AJAX delete
+				try {
+					const response = await $.ajax({
+						type: 'DELETE',
+						url: `${url}/${dbId}`,
+						data: {
+							_token: `{{ csrf_token() }}`,
+							id: dbId
+						},
+						dataType: 'json'
+					});
+					await swal.fire('Deleted!', response.message, response.status);
+					$('#form').bootstrapValidator('removeField', $field1);
+					$('#form').bootstrapValidator('removeField', $field2);
+					return true; // ✅ ALLOW plugin to remove row
+				} catch (e) {
+					await swal.fire('Ajax Error', 'Something went wrong with ajax!', 'error');
+					return false; // ❌ BLOCK removal
+				}
 
 			}
 		});
 	},
-	onRemove: (i, event, $row, name) => {
+	onRemove: async (i, event, $row, name) => {
 		console.log("Skill removed:", `skill_${i}`);
 
 		const $field1 = $row.find(`[name="${name}[${i}][name]"]`);
@@ -319,57 +353,45 @@ $("#skills_wrap").remAddRow({
 			$('#form').bootstrapValidator('removeField', $field2);
 			return true;
 		}
-		// swal
-		const titleapp = 'Skill';
-		const apiUrl = '{{ url('loanequipments') }}';
-		swal.fire({
-			title: `Delete ${titleapp}`,
-			text: `Are you sure to delete ${titleapp}?`,
-			icon: 'info',
+		let url = `{{ url('slippostage') }}`;
+		let dbId = idv;
+		const result = await swal.fire({
+			title: 'Are you sure?',
+			text: "It will be deleted permanently!",
+			type: 'warning',
 			showCancelButton: true,
-			showLoaderOnConfirm: true,
 			allowOutsideClick: false,
+			showLoaderOnConfirm: true,
 			confirmButtonColor: '#3085d6',
 			cancelButtonColor: '#d33',
-			confirmButtonText: 'Yes',
-			cancelButtonText: 'Cancel',
-			preConfirm: function() {
-				return new Promise(function(resolve) {
-					$.ajax({
-						url: `${apiUrl}/${idv}`,
-						type: 'DELETE',
-						dataType: 'json',
-						data: {
-								id: `${idv}`,
-								_token : `{{ csrf_token() }}`
-						},
-					})
-					.done(function(response){
-						swal.fire('Accept', response.message, response.status)
-						.then(function(){
-							// window.location.reload(true);
-							// table.ajax.reload(true);
-							// $('#form').bootstrapValidator('removeField', $field1);
-							// $('#form').bootstrapValidator('removeField', $field2);
-							return true;
-						});
-					})
-					.fail(function(){
-						swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
-						// swal.fire('Unauthorised', 'Error 401 : Unauthorised Action!', 'error');
-					})
-				});
-			},
-		})
-		.then((result) => {
-			if (result.dismiss === swal.DismissReason.cancel) {
-				swal.fire('Cancel Action', `${titleapp} is still active.`, 'info')
-			}
+			confirmButtonText: 'Yes, delete it!'
 		});
 
+		// ❌ Cancel clicked
+		if (result.isDismissed) {
+			await swal.fire('Cancelled', 'Your data is safe from delete', 'info');
+			return false;
+		}
 
-
-
+		// 2️⃣ Perform AJAX delete
+		try {
+			const response = await $.ajax({
+				type: 'DELETE',
+				url: `${url}/${dbId}`,
+				data: {
+					_token: `{{ csrf_token() }}`,
+					id: dbId
+				},
+				dataType: 'json'
+			});
+			await swal.fire('Deleted!', response.message, response.status);
+			$('#form').bootstrapValidator('removeField', $field1);
+			$('#form').bootstrapValidator('removeField', $field2);
+			return true; // ✅ ALLOW plugin to remove row
+		} catch (e) {
+			await swal.fire('Ajax Error', 'Something went wrong with ajax!', 'error');
+			return false; // ❌ BLOCK removal
+		}
 
 	}
 });
@@ -535,7 +557,7 @@ $("#countries_wrap").remAddRow({
 
 
 	},
-	onRemove: (i, event, $row, name) => {
+	onRemove: async (i, event, $row, name) => {
 		console.log("Country removed:", `ctry_${i}`);
 		// When a row is removed, remove its selected state from tracking
 		const stateVal = $(`#state_${i}`).val();
@@ -546,14 +568,52 @@ $("#countries_wrap").remAddRow({
 		const $field1 = $row.find(`[name="${name}[${i}][country_id]"]`);
 		const $field2 = $row.find(`[name="${name}[${i}][state_id]"]`);
 
-		const idv = $row.find(`input[name="${name}[${i}][id]"]`).val();
+		const idv = $row.find(`[name="${name}[${i}][id]"]`).val();
 		if (!idv) {
-
 			$('#form').bootstrapValidator('removeField', $field1);
 			$('#form').bootstrapValidator('removeField', $field2);
-
 			return true;
 		}
+		let url = `{{ url('slippostage') }}`;
+		let dbId = idv;
+		const result = await swal.fire({
+			title: 'Are you sure?',
+			text: "It will be deleted permanently!",
+			type: 'warning',
+			showCancelButton: true,
+			allowOutsideClick: false,
+			showLoaderOnConfirm: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Yes, delete it!'
+		});
+
+		// ❌ Cancel clicked
+		if (result.isDismissed) {
+			await swal.fire('Cancelled', 'Your data is safe from delete', 'info');
+			return false;
+		}
+
+		// 2️⃣ Perform AJAX delete
+		try {
+			const response = await $.ajax({
+				type: 'DELETE',
+				url: `${url}/${dbId}`,
+				data: {
+					_token: `{{ csrf_token() }}`,
+					id: dbId
+				},
+				dataType: 'json'
+			});
+			await swal.fire('Deleted!', response.message, response.status);
+			$('#form').bootstrapValidator('removeField', $field1);
+			$('#form').bootstrapValidator('removeField', $field2);
+			return true; // ✅ ALLOW plugin to remove row
+		} catch (e) {
+			await swal.fire('Ajax Error', 'Something went wrong with ajax!', 'error');
+			return false; // ❌ BLOCK removal
+		}
+
 	},
 });
 
