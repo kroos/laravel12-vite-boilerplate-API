@@ -1,5 +1,5 @@
 <h2>Experiences (1 Tiers Dynamic Input)</h2>
-<div id="experience_wrap" class="@error('experiences') is-invalid @enderror "></div>
+<div id="experience_wrap" class="row @error('experiences') is-invalid @enderror "></div>
 @error('experiences')
 	<div class="invalid-feedback">
 		{{ $message }}
@@ -10,7 +10,7 @@
 </div>
 <hr>
 <h2>Dynamic Skills with Sub-skills (2 Tiers Dynamic Input)</h2>
-<div id="skills_wrap" class="@error('skills') is-invalid @enderror"></div>
+<div id="skills_wrap" class="row @error('skills') is-invalid @enderror"></div>
 @error('skills')
 	<div class="invalid-feedback">
 		{{ $message }}
@@ -21,7 +21,7 @@
 </div>
 <hr>
 <h2>Dynamic Countries and States (1 Tiers Dynamic Input with Select2)</h2>
-<div id="countries_wrap" class="@error('countries') is-invalid @enderror"></div>
+<div id="countries_wrap" class="row @error('countries') is-invalid @enderror"></div>
 @error('countries')
 	<div class="invalid-feedback">
 		{{ $message }}

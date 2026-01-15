@@ -55,18 +55,85 @@ $('#table_id').DataTable({
 ///////////////////////////////////////////////////////////////////////////////////////////
 // Experiences (fieldName "experiences")
 $("#experience_wrap").remAddRow({
+
+	/* add remove row full option */
 	addBtn: "#experience_add",
+	startRow: 0,
 	maxRows: 10,
 	removeClass: "exp_remove",
 	rowSelector: 'exp',
 	fieldName: "experiences",
-	reindexRowID: ['customAttrib'],
+
+
+	/* ewindex full option */
+	reindexRowName: ['CAttrib1'],		// pattern => ${name}[${i}][product]
+	reindexRowID: ['CAttrib2'],			// pattern => userdefined_${i}
+	reindexRowIndex: ['CAttrib3'],	// pattern => ${i}
+
+	/* BootstrapValidator full option */
+	validator: {
+		form: '#form',
+		fields: {
+			'[name]': {
+				validators: {
+					notEmpty: {
+						message: 'Please insert name'
+					}
+				}
+			},
+			'[nameid]': {
+				validators: {
+					notEmpty: {
+						message: 'Please insert name ID'
+					},
+					// stringLength: {
+					// 	value: 0,
+					// 	message: 'Quantity must be equal or greater than 0. '
+					// },
+				}
+			},
+		}
+	},
+
+	/* SweetAlert2 and AJAX full option */
+	swal: {
+		options: {
+			title: 'Are you sure?',
+			text: 'It will be deleted permanently!',
+			icon: 'warning',
+			showCancelButton: true,
+			allowOutsideClick: false,
+			showLoaderOnConfirm: true,
+			confirmButtonText: 'Yes, delete it!',
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+
+			cancelTitle: 'Cancelled',
+			cancelMessage: 'Your data is safe from delete',
+			cancelType: 'info',
+
+			errorTitle: 'Ajax Error',
+			errorMessage: 'Something went wrong with ajax',
+			errorType: 'error'
+		},
+		ajax: {
+   		dbPrimaryKeyId: 'id',
+			url: `api/person`,
+			method: 'DELETE',
+			dataType: 'json',
+			data: {
+        _token: '{{ csrf_token() }}'
+			}
+		}
+	},
+
 	rowTemplate: (i, name) => `
-	<div class="col-sm-12 row g-3 m-1 exp" id="exp_${i}">
-		<input type="hidden" name="${name}[${i}][id]">
+	<div class="col-sm-12 row g-3 m-1 exp" id="exp_${i}" CAttrib3="${i}">
+		<input type="hidden" name="${name}[${i}][id]" >
 		<div class="form-group form-floating col-sm-4 @error('experiences.*.name') has-error @enderror">
-			<input type="text" name="${name}[${i}][name]" id="name_${i}" class="form-control @error('experiences.*.name') is-invalid @enderror" customAttrib="customAttrib_${i}">
-			<label for="name_${i}" class="form-col-label">Name :</label>
+			<input type="text" name="${name}[${i}][name]" id="name_${i}" class="form-control @error('experiences.*.name') is-invalid @enderror" CAttrib2="customValue2_${i}">
+			<label for="name_${i}" class="form-col-label" CAttrib1="custom[${i}][Value1]">
+			Name : </label>
 			@error('experiences.*.name')
 			<div class="invalid-feedback">
 				{{ $message }}
@@ -75,7 +142,8 @@ $("#experience_wrap").remAddRow({
 		</div>
 		<div class="form-floating col-sm-4 @error('experiences.*.nameid') is-invalid @enderror">
 			<input type="text" name="${name}[${i}][nameid]" id="id_${i}" class="form-control @error('experiences.*.nameid') is-invalid @enderror" customAttrib="customAttrib_${i}">
-			<label for="id_${i}" class="form-col-label">ID :</label>
+			<label for="id_${i}" class="form-col-label">
+			ID :</label>
 			@error('experiences.*.nameid')
 			<div class="invalid-feedback">
 				{{ $message }}
@@ -92,50 +160,6 @@ $("#experience_wrap").remAddRow({
 	},
 	onRemove: async (i, event, $row, name) => {
 		console.log("Experience removed:", `exp_${i}`);
-
-		const idv = $row.find(`input[name="${name}[${i}][id]"]`).val();
-		if (!idv) {
-			return true;
-		}
-		let url = `{{ url('slippostage') }}`;
-		let dbId = idv;
-		const result = await swal.fire({
-			title: 'Are you sure?',
-			text: "It will be deleted permanently!",
-			type: 'warning',
-			showCancelButton: true,
-			allowOutsideClick: false,
-			showLoaderOnConfirm: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			confirmButtonText: 'Yes, delete it!'
-		});
-
-		// ❌ Cancel clicked
-		if (result.isDismissed) {
-			await swal.fire('Cancelled', 'Your data is safe from delete', 'info');
-			return false;
-		}
-
-		// 2️⃣ Perform AJAX delete
-		try {
-			const response = await $.ajax({
-				type: 'DELETE',
-				url: `${url}/${dbId}`,
-				data: {
-					_token: `{{ csrf_token() }}`,
-					id: dbId
-				},
-				dataType: 'json'
-			});
-			await swal.fire('Deleted!', response.message, response.status);
-			return true; // ✅ ALLOW plugin to remove row
-		} catch (e) {
-			await swal.fire('Ajax Error', 'Something went wrong with ajax!', 'error');
-			return false; // ❌ BLOCK removal
-		}
-
-
 	},
 });
 
@@ -190,8 +214,13 @@ $("#skills_wrap").remAddRow({
 
 		<!-- Sub-skills wrapper -->
 		<div class="col-sm-9 offset-sm-3 my-1 border border-primary-subtle rounded">
-			<div id="subskill_wrap_${i}">
+			<div id="subskill_wrap_${i}" class="row @error('skills.*') is-invalid @enderror">
 			</div>
+			@error('skills.*')
+			<div class="invalid-feedback">
+				{{ $message }}
+			</div>
+			@enderror
 			<button type="button" id="subskill_add_${i}" class="m-1 btn btn-sm btn-primary">+ Add Sub-skill</button>
 		</div>
 
