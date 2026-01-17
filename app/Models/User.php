@@ -29,6 +29,7 @@ class User extends Authenticatable
 
 	// audit
 	// protected static $auditExclude = ['password'];
+	protected bool $auditEnabled = true;
 	protected static $auditIncludeSnapshot = true;
 	protected static $auditCriticalEvents = ['create', 'updated', 'deleted','force_deleted'];
 
