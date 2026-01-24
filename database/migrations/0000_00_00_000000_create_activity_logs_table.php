@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('activity_logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
+            // $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->string('name')->nullable();
             $table->string('event', 64);
             $table->string('model_type');
-            $table->unsignedBigInteger('model_id')->index();
+            $table->unsignedBigInteger('model_id');
             $table->string('route_name')->nullable();
             $table->string('method', 10)->nullable();
             $table->string('url')->nullable();
@@ -32,7 +33,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->index(['model_type', 'model_id']);
-            $table->index(['user_id']);
+            $table->index(['name']);
             $table->index(['event']);
         });
     }

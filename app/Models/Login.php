@@ -11,6 +11,10 @@ use Laravel\Sanctum\HasApiTokens;
 // auditable model
 use App\Traits\Auditable;
 
+// load sluggable
+// use Cviebrock\EloquentSluggable\Sluggable;
+// use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
+
 // database relationship
 use Illuminate\Database\Eloquent\SoftDeletes;
 // use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -24,12 +28,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Login extends Authenticatable implements MustVerifyEmail
 {
 	// use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+	// use HasApiTokens, HasFactory, Notifiable, SoftDeletes, Auditable, Sluggable;
 	use HasApiTokens, HasFactory, Notifiable, SoftDeletes, Auditable;
 
 	// audit
 	protected static $auditExclude = ['password','remember_token'];
 	protected static $auditIncludeSnapshot = true;
-	protected static $auditCriticalEvents = ['updated', 'deleted','force_deleted'];
+	protected static $auditCriticalEvents = ['created', 'updated', 'deleted','force_deleted'];
 
 	// protected $connection = 'mysql';
 	protected $table = 'logins';
@@ -68,6 +73,21 @@ class Login extends Authenticatable implements MustVerifyEmail
 		 // 'active' => 'boolean',
 		'password' => 'hashed',		// this is because we are using clear text password
 	];
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	// public function sluggable(): array
+	// {
+	// 	return [
+	// 		'slug' => [
+	// 			'source' => 'username'
+	// 		]
+	// 	];
+	// }
+
+	// public function getRouteKeyName()
+	// {
+	// 	return 'slug';
+	// }
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// db relation hasMany/hasOne

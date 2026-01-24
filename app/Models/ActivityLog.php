@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 // use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 // use Illuminate\Database\Eloquent\Relations\HasMany;
 // use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+// use Illuminate\Database\Eloquent\Relations\BelongsTo;
 // use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 // load helper
@@ -41,21 +41,14 @@ class ActivityLog extends Model
 
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	// set column attribute
-	// public function setNameAttribute($value)
+	// relationship
+	// public function belongstouser(): BelongsTo
 	// {
-	//     $this->attributes['name'] = ucwords(Str::lower($value));
+	// 	return $this->belongsTo(\App\Models\User::class, 'user_id');
 	// }
 
-	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	// relationship
-	public function belongstouser(): BelongsTo
-	{
-		return $this->belongsTo(\App\Models\User::class, 'user_id');
-	}
-
-	public function model()
-	{
-		return $this->morphTo();
-	}
+	// public function model()
+	// {
+	// 	return $this->morphTo();
+	// }
 }

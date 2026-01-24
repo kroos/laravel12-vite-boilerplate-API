@@ -18,7 +18,7 @@ return new class extends Migration
 						->constrained()
 						->nullOnDelete();
 			$table->string('username', 191)->unique();
-			$table->string('slug', 191)->unique();
+			// $table->string('slug', 191)->unique();
 			$table->string('password');
 			// $table->boolean('active');
 			$table->rememberToken();

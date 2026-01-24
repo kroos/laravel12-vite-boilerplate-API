@@ -12,7 +12,7 @@ use App\Traits\Auditable;
 class Model extends Eloquent {
 	use HasFactory, Auditable;
 	protected static $auditIncludeSnapshot = true;
-	protected static $auditCriticalEvents = ['updated', 'deleted','force_deleted'];
+	protected static $auditCriticalEvents = ['created', 'updated', 'deleted','force_deleted'];
 
 	protected $guarded = [];
 }
