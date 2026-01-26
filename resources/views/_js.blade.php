@@ -171,6 +171,7 @@ $("#skills_wrap").remAddRow({
 	fieldName: "skills",
 	rowSelector: "skill",
 	removeClass: "skill_remove",
+	nestedwrapper: `.nwrap`,
 
 	reindexRowName: ['customName'],
 	reindexRowID: ['customID'],
@@ -214,7 +215,7 @@ $("#skills_wrap").remAddRow({
 
 		<!-- Sub-skills wrapper -->
 		<div class="col-sm-9 offset-sm-3 my-1 border border-primary-subtle rounded">
-			<div id="subskill_wrap_${i}" class="row @error('skills.*') is-invalid @enderror">
+			<div id="subskill_wrap_${i}" class="nwrap row @error('skills.*') is-invalid @enderror">
 			</div>
 			@error('skills.*')
 			<div class="invalid-feedback">
