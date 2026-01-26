@@ -23,6 +23,7 @@ console.log('test');
 ///////////////////////////////////////////////////////////////////////////////////////////
 $('#select2').select2({
 		placeholder: 'Please choose',
+		theme: 'bootstrap-5',
 		allowClear: true,
 		closeOnSelect: true,
 		width: '100%',
@@ -140,15 +141,7 @@ $("#experience_wrap").remAddRow({
 			</div>
 			@enderror
 		</div>
-		<div class="form-floating col-sm-4 @error('experiences.*.nameid') is-invalid @enderror">
-			<input type="text" name="${name}[${i}][nameid]" id="id_${i}" class="form-control @error('experiences.*.nameid') is-invalid @enderror" customAttrib="customAttrib_${i}">
-			<label for="id_${i}" class="form-col-label">
-			ID :</label>
-			@error('experiences.*.nameid')
-			<div class="invalid-feedback">
-				{{ $message }}
-			</div>
-			@enderror
+		<div id="gar_${i}" class="col-sm-4 @error('experiences.*.nameid') is-invalid @enderror">
 		</div>
 		<div class="col-sm-1">
 			<button class="btn btn-sm btn-outline-danger exp_remove" data-id="${i}"><i class="fa-solid fa-xmark fa-beat"></i></button>
@@ -156,12 +149,71 @@ $("#experience_wrap").remAddRow({
 	</div>
 	`,
 	onAdd: (i, e, $r, name) => {
-		console.log("Experience added:", `exp_${i}`, e, $r, name);
+		// console.log("Experience added:", `exp_${i}`, e, $r, name);
+		populateCheckbox(i, name);
 	},
 	onRemove: async (i, event, $row, name) => {
-		console.log("Experience removed:", `exp_${i}`);
+		// console.log("Experience removed:", `exp_${i}`);
 	},
 });
+
+// checkbox
+function populateCheckbox(i = 0, name = '', getCountries = []) {
+
+	// getOptSalesgetCountries
+	$.ajax({
+		url: "{{ route('countries') }}",
+		dataType: 'json',
+		type: "GET",
+		success: function (response) {
+
+			const $checkbox = $("#gar_"+i);
+			if($checkbox.length > 0) $checkbox.empty();
+
+			// console.log(getCountries);
+			const obj = Array.isArray(getCountries) ? getCountries : Object.entries(getCountries);
+			// console.log(obj);
+
+			const cgetCountriess = obj.map(item =>  item[1]);
+
+			response.forEach(function(value, j) {
+				const checkboxId = `jdescitem${i}_${j}`;
+
+				// Check if this module_id exists in cicms
+				let found = cgetCountriess.find(m => m.text == value.id);
+
+				// If found, mark checked
+				let isChecked = found ? 'checked' : '';
+
+				let row = `
+					<div class="form-check">
+						<input
+							type="checkbox"
+							name="${name}[${i}][gItems][${j}][text]"
+							value="${value.id}"
+							id="${checkboxId}"
+							class="form-check-input @error('experiences.*.gItems.*.text') is-invalid @enderror"
+							${isChecked}
+						>
+						<label
+							class="form-check-label"
+							for="${checkboxId}"
+						>
+							${value.text}
+						</label>
+					</div>
+				`;
+				$checkbox.append(row);
+			});
+		},
+		error: function (jqXHR, textStatus, errorThrown) {
+			// console.log(textStatus, errorThrown);
+		}
+	});
+
+}
+
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 // 2 tier dynamic input
@@ -481,6 +533,7 @@ $("#countries_wrap").remAddRow({
 		// Initialize country select2
 		$country.select2({
 			placeholder: 'Select Country',
+			theme: 'bootstrap-5',
 			width: '100%',
 			allowClear: true,
 			closeOnSelect: true,
@@ -494,6 +547,7 @@ $("#countries_wrap").remAddRow({
 		// Initialize empty state select2
 		$state.select2({
 			placeholder: 'Select State',
+			theme: 'bootstrap-5',
 			width: '100%',
 			allowClear: true,
 			closeOnSelect: true,
@@ -506,6 +560,7 @@ $("#countries_wrap").remAddRow({
 			if (countryId) {
 				$state.select2({
 					placeholder: 'Select State',
+					theme: 'bootstrap-5',
 					width: '100%',
 					allowClear: true,
 					closeOnSelect: true,
@@ -552,6 +607,7 @@ $("#countries_wrap").remAddRow({
 				if (countryId) {
 					sel.select2({
 						placeholder: 'Select State',
+						theme: 'bootstrap-5',
 						width: '100%',
 						allowClear: true,
 						closeOnSelect: true,
@@ -656,11 +712,9 @@ $(function () {
 	$oldItemsValue = old('items', $itemsArray);
 	@endphp
 
-	const oldSkills = @json(old('skills', @$variable?->hasmanyModel()?->get(['column'])?->toArray() ?? [] ));
-	const oldExperiences = @json(old('experiences', @$variable?->hasmanyModel()?->get(['column'])?->toArray() ?? [] ));
-	const oldCountries = @json(old('countries', @$variable?->hasmanyModel()?->get(['column'])?->toArray() ?? [] ));
 
 	// === Restore old SKILLS ===
+	const oldSkills = @json(old('skills', @$variable?->hasmanyModel()?->get(['column'])?->toArray() ?? [] ));
 	if (oldSkills.length > 0) {
 		oldSkills.forEach(function (skill, i) {
 			$("#skills_add").trigger('click'); // simulate add skill
@@ -683,16 +737,49 @@ $(function () {
 	}
 
 	// === Restore old EXPERIENCES ===
+	<?php
+	$items = @$variable
+					?->hasmanyModel()
+					?->get()
+					->map(function ($items) {
+						$modules = $items
+											?->belongstomanyModel()
+											?->get()
+											->map(function ($module) {
+												return [
+													$module->pivot->id, [
+														'item_id' => $module->id,
+													]
+												];
+											})
+											->toArray();
+
+						return [
+							'id'       => $items->id,
+							'name'   => $items->name,
+							'gItems'     => $modules,
+						];
+					})
+					->toArray() ?? [];
+
+	$salesJD = old('experiences', $items);
+	// dd($salesJD);
+	?>
+	const oldExperiences = @json($salesJD);
 	if (oldExperiences.length > 0) {
 		oldExperiences.forEach(function (exp, i) {
 			$("#experience_add").trigger('click'); // simulate add experience
 			const $exp = $("#experience_wrap").children().eq(i);
-			$exp.find(`input[name="experiences[${i}][name]"]`).val(exp.name || '');
-			$exp.find(`input[name="experiences[${i}][id]"]`).val(exp.id || '');
+
+			populateCheckbox(j, 'experiences', sajobDesc.gItems);
+
+			$exp.find(`[name="experiences[${i}][name]"]`).val(exp.name || '');
+			$exp.find(`[name="experiences[${i}][id]"]`).val(exp.id || '');
 		});
 	}
 
 	// === Restore old COUNTRIES ===
+	const oldCountries = @json(old('countries', @$variable?->hasmanyModel()?->get(['column'])?->toArray() ?? [] ));
 	if (oldCountries.length > 0) {
 
 		oldCountries.forEach(function (ctry, i) {
