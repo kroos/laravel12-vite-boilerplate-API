@@ -54,4 +54,4 @@ import	'./bootstrapValidator5';
 import	'./bootstrap';
 
 // addRemoveRow
-import	'./addRemoveRowBootstrapValidatorSweetAlert2AjaxjQueryPlugin';
+import	'./addRemoveRowBootstrapValidator6SweetAlert2Ajax';

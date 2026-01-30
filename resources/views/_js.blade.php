@@ -55,7 +55,7 @@ $('#table_id').DataTable({
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 // Experiences (fieldName "experiences")
-$("#experience_wrap").remAddRow({
+$("#experience_wrap").addRemRow({
 
 	/* add remove row full option */
 	addBtn: "#experience_add",
@@ -217,7 +217,7 @@ function populateCheckbox(i = 0, name = '', getCountries = []) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 // 2 tier dynamic input
-$("#skills_wrap").remAddRow({
+$("#skills_wrap").addRemRow({
 	addBtn: "#skills_add",
 	maxRows: 3,
 	fieldName: "skills",
@@ -304,7 +304,7 @@ $("#skills_wrap").remAddRow({
 
 
 		// initialize sub-skills for this skill
-		$(`#subskill_wrap_${i}`).remAddRow({
+		$(`#subskill_wrap_${i}`).addRemRow({
 			addBtn: `#subskill_add_${i}`,
 			maxRows: 5,
 			fieldName: `skills[${i}][subskills]`,
@@ -481,7 +481,7 @@ $("#skills_wrap").remAddRow({
 ///////////////////////////////////////////////////////////////////////////////////////////
 // Countries (fieldName "countries")
 let selectedStates = []; // globally track selected state IDs
-$("#countries_wrap").remAddRow({
+$("#countries_wrap").addRemRow({
 	addBtn: "#countries_add",
 	maxRows: 3,
 	removeClass: "country_remove",
