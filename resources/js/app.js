@@ -48,10 +48,10 @@ import  './chart';
 import './fullcalendar';
 
 // bootstrap validator 5
-import	'./bootstrapValidator5';
+import	'bootstrapValidator5';
 
 // bootstrap
 import	'./bootstrap';
 
 // addRemoveRow
-import	'./addRemoveRowBootstrapValidator6SweetAlert2Ajax';
+import	'addremrow-validator5-swal2-ajax';
