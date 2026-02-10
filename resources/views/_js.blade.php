@@ -8,6 +8,18 @@ $(document).ready(function(){
 $(`#minicolor`).minicolors({});
 
 ///////////////////////////////////////////////////////////////////////////////////////////
+// $('#textarea').ckeditor({
+//     toolbar: [
+//         ['Bold', 'Italic'],
+//         ['NumberedList', 'BulletedList'],
+//         ['Link', 'Unlink'],
+//         ['Undo', 'Redo']
+//     ],
+//     height: 200
+// });
+// CKEDITOR.replace('#textarea');
+
+///////////////////////////////////////////////////////////////////////////////////////////
 $('#button1').click(function(){
 	alert("Thanks");
 });

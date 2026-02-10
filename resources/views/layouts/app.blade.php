@@ -18,7 +18,7 @@ $currentYear = Carbon::now()->year;
 	<link href="" type="image/x-icon" rel="icon" />
 
 	<!-- Styles / Scripts -->
-	@vite(['resources/scss/app.scss', 'resources/css/app.css', 'resources/js/app.js'])
+	@vite(['resources/scss/app.scss', 'resources/css/app.css'])
 
 	<!-- Bootswatch Cerulean CSS -->
 	<link href="{{ URL::asset('css/bootstrap.css') }}" rel="stylesheet">
@@ -73,10 +73,9 @@ $currentYear = Carbon::now()->year;
 	</div>
 	<!-- footer end -->
 </body>
-<script src="{{ asset('js/ckeditor/ckeditor.js') }}"></script>
-<script src="{{ asset('js/ckeditor/adapters/jquery.js') }}"></script>
+@vite(['resources/js/app.js'])
 <script type="module">
-	jQuery.noConflict ();
+	// jQuery.noConflict ();
 	(function($){
 		$(document).ready(function(){
 			$.get('/sanctum/csrf-cookie').done(function(){
