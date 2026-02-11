@@ -74,14 +74,13 @@ $currentYear = Carbon::now()->year;
 	<!-- footer end -->
 </body>
 @vite(['resources/js/app.js'])
+<script ></script>
 <script type="module">
 	// jQuery.noConflict ();
 	(function($){
 		$(document).ready(function(){
-			$.get('/sanctum/csrf-cookie').done(function(){
-				@section('js')
-				@show
-			});
+			@section('js')
+			@show
 		});
 	})(jQuery);
 </script>

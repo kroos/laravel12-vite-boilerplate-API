@@ -34,11 +34,7 @@ console.log('test');
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 $('#select2').select2({
-		placeholder: 'Please choose',
-		theme: 'bootstrap-5',
-		allowClear: true,
-		closeOnSelect: true,
-		width: '100%',
+	...config.select2
 });
 
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -54,15 +50,8 @@ $("#dp").jqueryuiDatepicker({
 ///////////////////////////////////////////////////////////////////////////////////////////
 $.fn.dataTable.datetime('D MMM YYYY');
 $('#table_id').DataTable({
-	'lengthMenu': [ [30, 60, 100, -1], [30, 60, 100, 'All'] ],
-	'columnDefs': [
-	{ type: 'date', 'targets': [4] },
-	],
-	'order': [[ 0, 'desc' ]],
-	'responsive': true,
-	'autoWidth': false,
-	// 'fixedHeader': true,
-	'dom': 'Bfrtip',
+	...config.datatable,
+	// dom: 'Bfrtip',
 });
 
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -395,15 +384,7 @@ $("#skills_wrap").addRemRow({
 				let url = `{{ url('slippostage') }}`;
 				let dbId = idv;
 				const result = await swal.fire({
-					title: 'Are you sure?',
-					text: "It will be deleted permanently!",
-					type: 'warning',
-					showCancelButton: true,
-					allowOutsideClick: false,
-					showLoaderOnConfirm: true,
-					confirmButtonColor: '#3085d6',
-					cancelButtonColor: '#d33',
-					confirmButtonText: 'Yes, delete it!'
+					...config.swal,
 				});
 
 				// ❌ Cancel clicked
@@ -450,15 +431,7 @@ $("#skills_wrap").addRemRow({
 		let url = `{{ url('slippostage') }}`;
 		let dbId = idv;
 		const result = await swal.fire({
-			title: 'Are you sure?',
-			text: "It will be deleted permanently!",
-			type: 'warning',
-			showCancelButton: true,
-			allowOutsideClick: false,
-			showLoaderOnConfirm: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			confirmButtonText: 'Yes, delete it!'
+			...config.swal,
 		});
 
 		// ❌ Cancel clicked
@@ -544,11 +517,7 @@ $("#countries_wrap").addRemRow({
 
 		// Initialize country select2
 		$country.select2({
-			placeholder: 'Select Country',
-			theme: 'bootstrap-5',
-			width: '100%',
-			allowClear: true,
-			closeOnSelect: true,
+				...config.select2,
 			ajax: {
 				url: '{{ route('countries') }}',
 				dataType: 'json',
@@ -558,11 +527,7 @@ $("#countries_wrap").addRemRow({
 
 		// Initialize empty state select2
 		$state.select2({
-			placeholder: 'Select State',
-			theme: 'bootstrap-5',
-			width: '100%',
-			allowClear: true,
-			closeOnSelect: true,
+				...config.select2,
 		});
 
 		// When country changes, reload states dynamically
@@ -571,11 +536,7 @@ $("#countries_wrap").addRemRow({
 			$state.val(null).trigger('change');
 			if (countryId) {
 				$state.select2({
-					placeholder: 'Select State',
-					theme: 'bootstrap-5',
-					width: '100%',
-					allowClear: true,
-					closeOnSelect: true,
+					...config.select2,
 					ajax: {
 						url: `{{ url('api/states') }}/${countryId}`,
 						dataType: 'json',
@@ -618,11 +579,7 @@ $("#countries_wrap").addRemRow({
 				const countryId = sel.closest('.row').find('select[id^="country_"]').val();
 				if (countryId) {
 					sel.select2({
-						placeholder: 'Select State',
-						theme: 'bootstrap-5',
-						width: '100%',
-						allowClear: true,
-						closeOnSelect: true,
+						...config.select2,
 						ajax: {
 							url: `{{ url('api/states') }}/${countryId}`,
 							dataType: 'json',
@@ -675,15 +632,7 @@ $("#countries_wrap").addRemRow({
 		let url = `{{ url('slippostage') }}`;
 		let dbId = idv;
 		const result = await swal.fire({
-			title: 'Are you sure?',
-			text: "It will be deleted permanently!",
-			type: 'warning',
-			showCancelButton: true,
-			allowOutsideClick: false,
-			showLoaderOnConfirm: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			confirmButtonText: 'Yes, delete it!'
+			...config.swal,
 		});
 
 		// ❌ Cancel clicked
@@ -865,26 +814,7 @@ new Chart(ctx, {
 ///////////////////////////////////////////////////////////////////////////////////////////
 let calendarEl = document.getElementById('calendar');
 let calendar = new Calendar(calendarEl, {
-	plugins: [
-		multiMonthPlugin,
-		dayGridPlugin,
-		timeGridPlugin,
-		listPlugin,
-		momentPlugin,
-		bootstrap5Plugin,
-	],
-	aspectRatio: 1.3,
-	height: 2000,
-	weekNumbers: true,
-	titleFormat: 'D MMMM, YYYY',  // momentPlugin
-	themeSystem: 'bootstrap5',   // bootstrap5Plugin
-	initialView: 'multiMonthYear',
-	headerToolbar: {
-		left: 'prev,next today',
-		center: 'title',
-		right: 'multiMonthYear,dayGridMonth,timeGridWeek'
-	},
-
+				...config.fullcalendar,
 	// events: {
 		// 	url: '{{ route('dashboard') }}',
 		// 	method: 'GET',
