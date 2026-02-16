@@ -75,8 +75,7 @@ $currentYear = Carbon::now()->year;
 </body>
 @vite(['resources/js/app.js'])
 <script ></script>
-<script type="module">
-	// jQuery.noConflict ();
+<script>
 	(function($){
 		$(document).ready(function(){
 			@section('js')

@@ -27,7 +27,6 @@ var table = $('#logs-table').DataTable({
 		type: 'GET',
 		// dataSrc: '',
 		data: function (d) {
-			d._token = '{!! csrf_token() !!}'
 			d.search_value = d.search.value; // map DataTables search
 		}
 	},
@@ -96,17 +95,12 @@ var table = $('#logs-table').DataTable({
 $(document).on('click', '.btn-del', function (e) {
 	const id = $(this).data('id');
 	swal.fire({
-		title: 'Delete Log?',
-		text: 'This will delete the log record.',
-		icon: 'warning',
-		showCancelButton: true,
-		confirmButtonText: 'Yes, delete it'
+		...config.swal,
 	}).then(res=>{
 		if(res.isConfirmed){
 			$.ajax({
 				url: `{{ url("activity-logs") }}/${id}`,
 				type: 'DELETE',
-				data: {_token:'{{ csrf_token() }}'},
 				success: ()=> table.ajax.reload()
 			});
 		}
