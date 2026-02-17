@@ -75,7 +75,7 @@ $currentYear = Carbon::now()->year;
 </body>
 @vite(['resources/js/app.js'])
 <script ></script>
-<script>
+<script type="module">
 	(function($){
 		$(document).ready(function(){
 			@section('js')
