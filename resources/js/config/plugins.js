@@ -14,6 +14,12 @@ const config = {
 		width: '100%',
 	},
 
+	datepicker: {
+		dateFormat: 'yy-mm-dd',
+		changeMonth: true,
+		changeYear: true,
+	},
+
 	datatable: {
 		lengthMenu: [[50, 100, -1], [50, 100, 'All']],
 		columnDefs: [
@@ -23,7 +29,7 @@ const config = {
 		responsive: true,
 		autoWidth: false,
 		fixedHeader: true,
-		// dom: 'Bfrtip',
+		dom: 'Bfrtip',
 	},
 
 	fullcalendar: {
@@ -78,15 +84,6 @@ $('#table').DataTable({
     ...Config.datatable,
     paging: false, // override example
 });
-
-If you want to **extend** instead:
-
-```js
-columnDefs: [
-    ...(config.datatable.columnDefs || []),
-    { type: 'date', targets: [1] },
-],
-```
 
 new Calendar(el, {
     ...Config.fullcalendar,
